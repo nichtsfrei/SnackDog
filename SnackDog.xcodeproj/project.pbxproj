@@ -1,0 +1,637 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		174F51322774DAB400FB76D5 /* SnackDogApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174F51312774DAB400FB76D5 /* SnackDogApp.swift */; };
+		174F51342774DAB400FB76D5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174F51332774DAB400FB76D5 /* ContentView.swift */; };
+		174F51362774DAB500FB76D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 174F51352774DAB500FB76D5 /* Assets.xcassets */; };
+		174F51392774DAB500FB76D5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 174F51382774DAB500FB76D5 /* Preview Assets.xcassets */; };
+		174F513B2774DAB500FB76D5 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174F513A2774DAB500FB76D5 /* Persistence.swift */; };
+		174F51482774DAB500FB76D5 /* SnackDogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174F51472774DAB500FB76D5 /* SnackDogTests.swift */; };
+		174F51522774DAB500FB76D5 /* SnackDogUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174F51512774DAB500FB76D5 /* SnackDogUITests.swift */; };
+		174F51542774DAB500FB76D5 /* SnackDogUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174F51532774DAB500FB76D5 /* SnackDogUITestsLaunchTests.swift */; };
+		174F51652774DBC700FB76D5 /* dog.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 174F51632774DBC700FB76D5 /* dog.xcdatamodeld */; };
+		174F51682774DC6600FB76D5 /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174F51662774DC6600FB76D5 /* EditView.swift */; };
+		174F51692774DC6600FB76D5 /* FoodPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174F51672774DC6600FB76D5 /* FoodPlan.swift */; };
+		174F516E2774DCB600FB76D5 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174F516C2774DCB600FB76D5 /* Shared.swift */; };
+		174F516F2774DCB600FB76D5 /* simple_dog_barf.c in Sources */ = {isa = PBXBuildFile; fileRef = 174F516D2774DCB600FB76D5 /* simple_dog_barf.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		174F51442774DAB500FB76D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 174F51262774DAB400FB76D5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 174F512D2774DAB400FB76D5;
+			remoteInfo = SnackDog;
+		};
+		174F514E2774DAB500FB76D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 174F51262774DAB400FB76D5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 174F512D2774DAB400FB76D5;
+			remoteInfo = SnackDog;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		174F512E2774DAB400FB76D5 /* SnackDog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SnackDog.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		174F51312774DAB400FB76D5 /* SnackDogApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackDogApp.swift; sourceTree = "<group>"; };
+		174F51332774DAB400FB76D5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		174F51352774DAB500FB76D5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		174F51382774DAB500FB76D5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		174F513A2774DAB500FB76D5 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		174F51432774DAB500FB76D5 /* SnackDogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SnackDogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		174F51472774DAB500FB76D5 /* SnackDogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackDogTests.swift; sourceTree = "<group>"; };
+		174F514D2774DAB500FB76D5 /* SnackDogUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SnackDogUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		174F51512774DAB500FB76D5 /* SnackDogUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackDogUITests.swift; sourceTree = "<group>"; };
+		174F51532774DAB500FB76D5 /* SnackDogUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackDogUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		174F51642774DBC700FB76D5 /* dog.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = dog.xcdatamodel; sourceTree = "<group>"; };
+		174F51662774DC6600FB76D5 /* EditView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
+		174F51672774DC6600FB76D5 /* FoodPlan.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodPlan.swift; sourceTree = "<group>"; };
+		174F516A2774DCB600FB76D5 /* SnackDog-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SnackDog-Bridging-Header.h"; sourceTree = "<group>"; };
+		174F516B2774DCB600FB76D5 /* simple_dog_barf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simple_dog_barf.h; sourceTree = "<group>"; };
+		174F516C2774DCB600FB76D5 /* Shared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shared.swift; sourceTree = "<group>"; };
+		174F516D2774DCB600FB76D5 /* simple_dog_barf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = simple_dog_barf.c; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		174F512B2774DAB400FB76D5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		174F51402774DAB500FB76D5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		174F514A2774DAB500FB76D5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		174F51252774DAB400FB76D5 = {
+			isa = PBXGroup;
+			children = (
+				174F51302774DAB400FB76D5 /* SnackDog */,
+				174F51462774DAB500FB76D5 /* SnackDogTests */,
+				174F51502774DAB500FB76D5 /* SnackDogUITests */,
+				174F512F2774DAB400FB76D5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		174F512F2774DAB400FB76D5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				174F512E2774DAB400FB76D5 /* SnackDog.app */,
+				174F51432774DAB500FB76D5 /* SnackDogTests.xctest */,
+				174F514D2774DAB500FB76D5 /* SnackDogUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		174F51302774DAB400FB76D5 /* SnackDog */ = {
+			isa = PBXGroup;
+			children = (
+				174F51662774DC6600FB76D5 /* EditView.swift */,
+				174F51672774DC6600FB76D5 /* FoodPlan.swift */,
+				174F51312774DAB400FB76D5 /* SnackDogApp.swift */,
+				174F51332774DAB400FB76D5 /* ContentView.swift */,
+				174F51352774DAB500FB76D5 /* Assets.xcassets */,
+				174F513A2774DAB500FB76D5 /* Persistence.swift */,
+				174F51632774DBC700FB76D5 /* dog.xcdatamodeld */,
+				174F516C2774DCB600FB76D5 /* Shared.swift */,
+				174F516D2774DCB600FB76D5 /* simple_dog_barf.c */,
+				174F516B2774DCB600FB76D5 /* simple_dog_barf.h */,
+				174F51372774DAB500FB76D5 /* Preview Content */,
+				174F516A2774DCB600FB76D5 /* SnackDog-Bridging-Header.h */,
+			);
+			path = SnackDog;
+			sourceTree = "<group>";
+		};
+		174F51372774DAB500FB76D5 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				174F51382774DAB500FB76D5 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		174F51462774DAB500FB76D5 /* SnackDogTests */ = {
+			isa = PBXGroup;
+			children = (
+				174F51472774DAB500FB76D5 /* SnackDogTests.swift */,
+			);
+			path = SnackDogTests;
+			sourceTree = "<group>";
+		};
+		174F51502774DAB500FB76D5 /* SnackDogUITests */ = {
+			isa = PBXGroup;
+			children = (
+				174F51512774DAB500FB76D5 /* SnackDogUITests.swift */,
+				174F51532774DAB500FB76D5 /* SnackDogUITestsLaunchTests.swift */,
+			);
+			path = SnackDogUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		174F512D2774DAB400FB76D5 /* SnackDog */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 174F51572774DAB500FB76D5 /* Build configuration list for PBXNativeTarget "SnackDog" */;
+			buildPhases = (
+				174F512A2774DAB400FB76D5 /* Sources */,
+				174F512B2774DAB400FB76D5 /* Frameworks */,
+				174F512C2774DAB400FB76D5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SnackDog;
+			productName = SnackDog;
+			productReference = 174F512E2774DAB400FB76D5 /* SnackDog.app */;
+			productType = "com.apple.product-type.application";
+		};
+		174F51422774DAB500FB76D5 /* SnackDogTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 174F515A2774DAB500FB76D5 /* Build configuration list for PBXNativeTarget "SnackDogTests" */;
+			buildPhases = (
+				174F513F2774DAB500FB76D5 /* Sources */,
+				174F51402774DAB500FB76D5 /* Frameworks */,
+				174F51412774DAB500FB76D5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				174F51452774DAB500FB76D5 /* PBXTargetDependency */,
+			);
+			name = SnackDogTests;
+			productName = SnackDogTests;
+			productReference = 174F51432774DAB500FB76D5 /* SnackDogTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		174F514C2774DAB500FB76D5 /* SnackDogUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 174F515D2774DAB500FB76D5 /* Build configuration list for PBXNativeTarget "SnackDogUITests" */;
+			buildPhases = (
+				174F51492774DAB500FB76D5 /* Sources */,
+				174F514A2774DAB500FB76D5 /* Frameworks */,
+				174F514B2774DAB500FB76D5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				174F514F2774DAB500FB76D5 /* PBXTargetDependency */,
+			);
+			name = SnackDogUITests;
+			productName = SnackDogUITests;
+			productReference = 174F514D2774DAB500FB76D5 /* SnackDogUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		174F51262774DAB400FB76D5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1320;
+				LastUpgradeCheck = 1320;
+				TargetAttributes = {
+					174F512D2774DAB400FB76D5 = {
+						CreatedOnToolsVersion = 13.2.1;
+						LastSwiftMigration = 1320;
+					};
+					174F51422774DAB500FB76D5 = {
+						CreatedOnToolsVersion = 13.2.1;
+						TestTargetID = 174F512D2774DAB400FB76D5;
+					};
+					174F514C2774DAB500FB76D5 = {
+						CreatedOnToolsVersion = 13.2.1;
+						TestTargetID = 174F512D2774DAB400FB76D5;
+					};
+				};
+			};
+			buildConfigurationList = 174F51292774DAB400FB76D5 /* Build configuration list for PBXProject "SnackDog" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 174F51252774DAB400FB76D5;
+			productRefGroup = 174F512F2774DAB400FB76D5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				174F512D2774DAB400FB76D5 /* SnackDog */,
+				174F51422774DAB500FB76D5 /* SnackDogTests */,
+				174F514C2774DAB500FB76D5 /* SnackDogUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		174F512C2774DAB400FB76D5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				174F51392774DAB500FB76D5 /* Preview Assets.xcassets in Resources */,
+				174F51362774DAB500FB76D5 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		174F51412774DAB500FB76D5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		174F514B2774DAB500FB76D5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		174F512A2774DAB400FB76D5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				174F516E2774DCB600FB76D5 /* Shared.swift in Sources */,
+				174F51652774DBC700FB76D5 /* dog.xcdatamodeld in Sources */,
+				174F51682774DC6600FB76D5 /* EditView.swift in Sources */,
+				174F513B2774DAB500FB76D5 /* Persistence.swift in Sources */,
+				174F51342774DAB400FB76D5 /* ContentView.swift in Sources */,
+				174F51692774DC6600FB76D5 /* FoodPlan.swift in Sources */,
+				174F51322774DAB400FB76D5 /* SnackDogApp.swift in Sources */,
+				174F516F2774DCB600FB76D5 /* simple_dog_barf.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		174F513F2774DAB500FB76D5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				174F51482774DAB500FB76D5 /* SnackDogTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		174F51492774DAB500FB76D5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				174F51542774DAB500FB76D5 /* SnackDogUITestsLaunchTests.swift in Sources */,
+				174F51522774DAB500FB76D5 /* SnackDogUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		174F51452774DAB500FB76D5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 174F512D2774DAB400FB76D5 /* SnackDog */;
+			targetProxy = 174F51442774DAB500FB76D5 /* PBXContainerItemProxy */;
+		};
+		174F514F2774DAB500FB76D5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 174F512D2774DAB400FB76D5 /* SnackDog */;
+			targetProxy = 174F514E2774DAB500FB76D5 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		174F51552774DAB500FB76D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		174F51562774DAB500FB76D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		174F51582774DAB500FB76D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SnackDog/Preview Content\"";
+				DEVELOPMENT_TEAM = 3KHAA5YQG7;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "github.com-nichtsfrei.SnackDog";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "SnackDog/SnackDog-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		174F51592774DAB500FB76D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SnackDog/Preview Content\"";
+				DEVELOPMENT_TEAM = 3KHAA5YQG7;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "github.com-nichtsfrei.SnackDog";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "SnackDog/SnackDog-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		174F515B2774DAB500FB76D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3KHAA5YQG7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "github.com-nichtsfrei.SnackDogTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SnackDog.app/SnackDog";
+			};
+			name = Debug;
+		};
+		174F515C2774DAB500FB76D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3KHAA5YQG7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "github.com-nichtsfrei.SnackDogTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SnackDog.app/SnackDog";
+			};
+			name = Release;
+		};
+		174F515E2774DAB500FB76D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3KHAA5YQG7;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "github.com-nichtsfrei.SnackDogUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SnackDog;
+			};
+			name = Debug;
+		};
+		174F515F2774DAB500FB76D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3KHAA5YQG7;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "github.com-nichtsfrei.SnackDogUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SnackDog;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		174F51292774DAB400FB76D5 /* Build configuration list for PBXProject "SnackDog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				174F51552774DAB500FB76D5 /* Debug */,
+				174F51562774DAB500FB76D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		174F51572774DAB500FB76D5 /* Build configuration list for PBXNativeTarget "SnackDog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				174F51582774DAB500FB76D5 /* Debug */,
+				174F51592774DAB500FB76D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		174F515A2774DAB500FB76D5 /* Build configuration list for PBXNativeTarget "SnackDogTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				174F515B2774DAB500FB76D5 /* Debug */,
+				174F515C2774DAB500FB76D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		174F515D2774DAB500FB76D5 /* Build configuration list for PBXNativeTarget "SnackDogUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				174F515E2774DAB500FB76D5 /* Debug */,
+				174F515F2774DAB500FB76D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		174F51632774DBC700FB76D5 /* dog.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				174F51642774DBC700FB76D5 /* dog.xcdatamodel */,
+			);
+			currentVersion = 174F51642774DBC700FB76D5 /* dog.xcdatamodel */;
+			path = dog.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 174F51262774DAB400FB76D5 /* Project object */;
+}
