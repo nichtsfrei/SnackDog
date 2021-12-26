@@ -18,16 +18,16 @@ extension Int16 {
 }
 
 extension UnitMass {
-    func toBCDUnit() -> Int16 {
-        switch self {
-        case UnitMass.kilograms:
-            return Int16(bcd_kilo_gram.rawValue)
-        case UnitMass.grams:
-            return Int16(bcd_gram.rawValue)
-        case UnitMass.milligrams:
-            return Int16(bcd_milli_gram.rawValue)
+    func toBCDUnit() -> bcd_weight_unit {
+        switch self.symbol {
+        case "kg":
+            return bcd_kilo_gram
+        case "g":
+            return bcd_gram
+        case "mg":
+            return bcd_milli_gram
         default:
-            return Int16(bcd_micro_gram.rawValue)
+            return bcd_micro_gram
         }
     }
 }
@@ -38,8 +38,6 @@ struct EDog {
     var name: String
     var birthDate: Date
     var weight: Measurement<UnitMass>
-    var jod: Measurement<UnitMass>
-    var jodPer: Measurement<UnitMass>
     var activityHours: Int16
     var size: bcd_dog_size
     var isNautered: Bool
@@ -52,31 +50,38 @@ extension EDog: Equatable {
         a.name == b.name &&
         a.birthDate == b.birthDate  &&
         a.weight == b.weight &&
-        a.jod == b.jod &&
-        a.jodPer == b.jodPer &&
         a.activityHours == b.activityHours &&
         a.size == b.size &&
         a.isNautered == b.isNautered &&
         a.isOld == b.isOld
     }
+    
+    static func new() -> EDog {
+        return EDog(
+            id: UUID(),
+            name: "",
+            birthDate: Date(),
+            weight: Measurement<UnitMass>(value: 23.0, unit: .kilograms),
+            activityHours: 2,
+            size: bcd_dog_medium,
+            isNautered: false,
+            isOld: false)
+    }
 }
 
-struct EditView: View {
+struct DogEditView: View {
     
     @StateObject var refresh: Shared
     
     
     @State var dog: EDog
     @State var weightUnit: UnitMass
-    @State var jodWeightUnit: UnitMass
-    @State var jodPerWeightUnit: UnitMass
     
     init(refresh: Shared, dog: EDog) {
         self._refresh = StateObject(wrappedValue: refresh)
         self._dog = State(wrappedValue: dog)
+        
         self._weightUnit = State(wrappedValue: dog.weight.unit)
-        self._jodWeightUnit = State(wrappedValue: dog.jod.unit)
-        self._jodPerWeightUnit = State(wrappedValue: dog.jodPer.unit)
         
         
     }
@@ -96,7 +101,7 @@ struct EditView: View {
     
     
     private func save() {
-        let _ = refresh.manipulator.put(dog: dog)
+        let _ = refresh.dogManipulator.put(dog: dog)
     }
     
     var body: some View {
@@ -125,6 +130,7 @@ struct EditView: View {
             GroupBox(label: Text("Weight")) {
                 HStack {
                     TextField("Weight", value: $dog.weight.value, format: .number)
+                        .keyboardType(.decimalPad)
                     Picker(weightUnit.symbol, selection: $weightUnit) {
                         ForEach(0..<2, content: { index in
                             Text(allowedWeight[index].symbol).tag(allowedWeight[index])
@@ -136,37 +142,15 @@ struct EditView: View {
             GroupBox(label: Text("Hours of activity")) {
                 TextField("Hours", value: $dog.activityHours, format: .number)
             }
-            GroupBox(label: Text("Jod / Per")) {
-                HStack {
-                    TextField("Jod", value: $dog.jod.value, format: .number)
-                    Picker(jodWeightUnit.symbol, selection: $jodWeightUnit) {
-                        ForEach(1..<allowedWeight.count, content: { index in
-                            Text(allowedWeight[index].symbol).tag(allowedWeight[index])
-                        })
-                    }
-                }
-                HStack {
-                    TextField("Per", value: $dog.jodPer.value, format: .number)
-                    Picker(jodPerWeightUnit.symbol, selection: $jodPerWeightUnit) {
-                        ForEach(0..<allowedWeight.count, content: { index in
-                            Text(allowedWeight[index].symbol).tag(allowedWeight[index])
-                        })
-                    }
-                }
-            }
+            
 
-        }.onChange(of: dog) { newDog in
-            //
-        }
-        .onChange(of: jodWeightUnit) { njwu in
-            let previous = dog.jod
-            dog.jod = Measurement(value: previous.value, unit: njwu)
-        }.onChange(of: jodPerWeightUnit){ njwu in
-            let previous = dog.jodPer
-            dog.jodPer = Measurement(value: previous.value, unit: njwu)
         }.onChange(of: weightUnit){ njwu in
             let previous = dog.weight
             dog.weight = Measurement(value: previous.value, unit: njwu)
+            
+        }.onSubmit {
+            save()
+            refresh.viewstate = .foodplan
         }
         .toolbar{
             HStack {
@@ -177,7 +161,6 @@ struct EditView: View {
                     Image(systemName: "checkmark.square")
                 }
             }
-
         }
         
     }
@@ -186,13 +169,12 @@ struct EditView: View {
 struct EditView_Previews: PreviewProvider {
     static var previews: some View {
         let vc = PersistenceController.preview.container.viewContext
-        let dog = Dog(context: vc)
-        PersistenceController.ExtendDog(newItem: dog, i: 1)
+        let dog = PersistenceController.NewDog(vc: vc, i: 1)
         let shared = Shared(
-            fetcher: DogFetcher(managedObjectContext: vc),
+            fetcher: Fetcher<Dog>(managedObjectContext: vc, basefetchRequest: Dog.fetchRequest()),
             manipulator: DogManipulator(context: vc)
         )
-        return EditView(
+        return DogEditView(
             refresh: shared,
             dog: dog.toEdog()
         ).environment(\.managedObjectContext, vc)

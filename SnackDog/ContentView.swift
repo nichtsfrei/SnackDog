@@ -12,6 +12,36 @@ extension Float {
     }
 }
 
+extension String {
+    static let supportedMassUnits: [String: UnitMass] = [
+        "kg": .kilograms,
+        "g": .grams,
+        "dg": .decigrams,
+        "cg": .centigrams,
+        "mg": .milligrams,
+        "µg": .micrograms,
+        "ng": .nanograms,
+        "pg": .picograms,
+        "oz": .ounces,
+        "lb": .pounds,
+    ]
+    func toUnitMass() -> UnitMass? {
+        
+        return String.supportedMassUnits[self]
+        
+    }
+}
+
+extension MeasurementData {
+    func measurement() -> Measurement<UnitMass>? {
+        if let unit = self.symbol?.toUnitMass() {
+            return Measurement(value: self.value, unit: unit)
+        }
+        return nil
+        
+    }
+}
+
 extension Dog {
     func toEdog() -> EDog {
         let dog = self
@@ -20,9 +50,9 @@ extension Dog {
             id: self.id ?? UUID(),
             name: dog.name ?? "",
             birthDate: dog.birthdate ?? Date(),
-            weight: Measurement(value: dog.weight, unit: dog.weight_unit.toMassUnit()),
-            jod: Measurement(value: dog.jod, unit: dog.jod_unit.toMassUnit()),
-            jodPer: Measurement(value: dog.jod_per, unit: dog.jod_per_unit.toMassUnit()),
+            
+            weight: dog.weight?.measurement() ?? Measurement(value: 0, unit: .kilograms) ,
+            
             activityHours: dog.activity_hours,
             size: bcd_dog_size(UInt32(dog.size)),
             isNautered: dog.is_nautered,
@@ -31,119 +61,56 @@ extension Dog {
     }
 }
 
-struct SingleDogView: View {
-    var dog: Dog
-    @StateObject var shared: Shared
+struct Sidebar: View {
+    
+    @StateObject var refresh: Shared
+    
+    
+    
     
     var body: some View {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
-        return GroupBox(label: HStack {
-                Text(dog.name ?? "None")
-                let uSymbol = dog.weight_unit.toMassUnit().symbol
-                Text("(\(dog.weight.printround(to: 2)) \(uSymbol))" ).foregroundColor(.secondary)
-            }) {
-                HStack {
-                    Image(systemName: "calendar.circle")
-                    Text(formatter.string(from: dog.birthdate ?? Date()))
-                    Spacer()
-
-                    Button(action: {
-                        let _ = shared.manipulator.remove(dog: dog)
-                    }) {
-                        Image(systemName: "trash")
-                    }
-                    Button(action: {
-                        shared.selected = dog
-                        shared.viewstate = .edit
-                    }){
-                        Image(systemName: "square.and.pencil")
-                    }
-                }
-            }.onTapGesture {
-                shared.selected = dog
-                shared.viewstate = .foodplan
-            }.onLongPressGesture{
-                shared.selected = dog
-                shared.viewstate = .edit
+        let aF = Fetcher(managedObjectContext: refresh.dogManipulator.viewContext, basefetchRequest: JodData.fetchRequest())
+        return List {
+            NavigationLink(
+                destination: DogsView(shared: refresh),
+                tag: .dogs,
+                selection: $refresh.kindState
+            ) {
+                Text("Dogs")
             }
-        
+            NavigationLink(
+                destination: AlgaePowderView.fromshared(shared: refresh),
+                tag: .algae,
+                selection: $refresh.kindState
+            ) {
+                Text("Algae Powder (\(aF.data.count))")
+            }
+        }.listStyle(SidebarListStyle())
     }
 }
 
 struct ContentView: View {
     
     @StateObject var refresh: Shared
+    var jodFetcher: Fetcher<JodData>
     
-    func newDog() -> EDog {
-        return EDog(
-            id: UUID(),
-            name: "",
-            birthDate: Date(),
-            weight: Measurement<UnitMass>(value: 23.0, unit: .kilograms),
-            jod: Measurement<UnitMass>(value: 631, unit: .milligrams),
-            jodPer: Measurement(value: 1, unit: .kilograms),
-            activityHours: 2,
-            size: bcd_dog_medium,
-            isNautered: false,
-            isOld: false)
+    init(refresh: Shared) {
+        self._refresh = StateObject(wrappedValue: refresh)
+        jodFetcher = Fetcher(managedObjectContext: refresh.dogManipulator.viewContext, basefetchRequest: JodData.fetchRequest())
+        
     }
     
     var body: some View {
         
         return NavigationView {
-            
-            VStack(alignment: .leading, spacing: 0.0) {
-                ScrollView {
-                    ForEach(refresh.fetcher.dogs) { dog in
-                        SingleDogView(dog: dog, shared: refresh)
-                        
-                    }
-                }
+            Sidebar(refresh: refresh)
+            DogsView(shared: refresh)
+            if refresh.dogFetcher.data.isEmpty {
+                DogEditView(refresh: refresh, dog: EDog.new())
+            } else {
+                FoodPlan(dog: refresh.dogFetcher.data[0].toEdog(), jodData: jodFetcher.data)
             }
-                .frame(
-                    minWidth: 0,
-                    maxWidth: .infinity,
-                    minHeight: 0,
-                    maxHeight: .infinity,
-                    alignment: .leading
-                )
-                .toolbar{
-                    HStack {
-                        let dog = refresh.selected?.toEdog() ?? newDog()
-                        NavigationLink(
-                            destination: FoodPlan(dog: dog).navigationTitle("\(dog.name)"),
-                            tag: .foodplan,
-                            selection: $refresh.viewstate
-                        ) {
-                            EmptyView()
-                        }
-                        NavigationLink(
-                            destination: EditView(refresh: refresh, dog: newDog()).navigationTitle("Add"),
-                            tag: .add,
-                            selection: $refresh.viewstate
-                        ) {
-                            EmptyView()
-                        }
-                        NavigationLink(
-                            destination: EditView(refresh: refresh, dog: dog).navigationTitle("Edit"),
-                            tag: .edit,
-                            selection: $refresh.viewstate
-                        ) {
-                            EmptyView()
-                        }
-                        Button(action: {
-                            refresh.viewstate = .add
-                        }){
-                            Image(systemName: "plus.app.fill")
-                        }
-                    }
-                }
-            //bottom_menu
-            
         }
-        
     }
 }
 
@@ -151,12 +118,11 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let vc = PersistenceController.preview.container.viewContext
         let shared = Shared(
-            fetcher: DogFetcher(managedObjectContext: vc),
+            fetcher: Fetcher<Dog>(managedObjectContext: vc, basefetchRequest: Dog.fetchRequest()),
             manipulator: DogManipulator(context: vc)
         )
+        
         ContentView(refresh: shared)
             .previewDevice("iPhone 13 mini")
-        
-        
     }
 }

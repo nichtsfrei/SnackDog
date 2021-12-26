@@ -10,7 +10,8 @@ import CoreData
 struct PersistenceController {
     static let shared = PersistenceController()
     
-    static func ExtendDog(newItem: Dog, i: Int) {
+    static func NewDog(vc: NSManagedObjectContext, i: Int) -> Dog {
+        let newItem = Dog(context: vc)
         newItem.name = "name \(i)"
         newItem.activity_hours = Int16(i + 1)
         newItem.size = Int16(i % 3)
@@ -19,24 +20,24 @@ struct PersistenceController {
             newItem.id = UUID()
             newItem.is_nautered = i % 2 == 0
             newItem.is_old = i % 6 == 0
-            newItem.jod = 631
-            newItem.jod_unit = Int16(bcd_micro_gram.rawValue)
-            newItem.jod_per = 1
-            newItem.jod_per_unit = Int16(bcd_kilo_gram.rawValue)
-            newItem.weight = 23.00
-            newItem.weight_unit = Int16(bcd_kilo_gram.rawValue)
+            
+            newItem.weight = MeasurementData(context: vc)
+            newItem.weight?.id = UUID()
+            newItem.weight?.value = 23.23
+            newItem.weight?.symbol = "kg"
         } catch {
             let nsError = error as NSError
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             
         }
+        return newItem
     }
     static var preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
+        
         for i in 0..<10 {
-            let newItem = Dog(context: viewContext)
-            ExtendDog(newItem: newItem, i: i)
+            let _ = NewDog(vc: viewContext, i: i)
             
         }
         do {
@@ -79,69 +80,50 @@ struct PersistenceController {
     }
 }
 
-class DogFetcher: NSObject, ObservableObject {
+class Fetcher<T:NSManagedObject>: NSObject, ObservableObject, NSFetchedResultsControllerDelegate {
+    @Published var data: [T] = []
+    private let controller: NSFetchedResultsController<T>
     
-    @Published var dogs: [Dog] = []
-    private let dogController: NSFetchedResultsController<Dog>
     
-    init(managedObjectContext: NSManagedObjectContext) {
-        let ft = Dog.fetchRequest()
+    init(managedObjectContext: NSManagedObjectContext, basefetchRequest:NSFetchRequest<T>) {
+        let ft = basefetchRequest
         ft.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        dogController = NSFetchedResultsController(fetchRequest: ft,
-                                                   managedObjectContext: managedObjectContext,
-                                                   sectionNameKeyPath: nil, cacheName: nil)
+        controller = NSFetchedResultsController(fetchRequest: ft,
+                                                managedObjectContext: managedObjectContext,
+                                                sectionNameKeyPath: nil, cacheName: nil)
         super.init()
-        dogController.delegate = self
+        controller.delegate = self
         
         reload()
     }
     
     func reload() {
         do {
-            try dogController.performFetch()
-            
-            dogs = dogController.fetchedObjects ?? []
+            try controller.performFetch()
+            data = controller.fetchedObjects ?? []
         } catch {
             print("failed to fetch items!")
         }
     }
     
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        guard let nJodData = controller.fetchedObjects as? [T]
+        else { return }
+        
+        data = nJodData
+    }
+    
 }
 
-class DogManipulator {
-    
+class Manipulator<T:NSManagedObject> {
     let viewContext: NSManagedObjectContext
     
     init(context: NSManagedObjectContext) {
         self.viewContext = context
     }
     
-    func toDog(dog: EDog) -> Dog {
-        let toSave = Dog(context: viewContext)
-        toSave.id = dog.id
-        toSave.name = dog.name
-        toSave.jod = dog.jod.value
-        toSave.jod_unit = dog.jod.unit.toBCDUnit()
-        toSave.jod_per = dog.jodPer.value
-        toSave.jod_per_unit = dog.jodPer.unit.toBCDUnit()
-        toSave.activity_hours = dog.activityHours
-        toSave.weight = dog.weight.value
-        toSave.weight_unit = dog.weight.unit.toBCDUnit()
-        toSave.birthdate = dog.birthDate
-        toSave.size = Int16(dog.size.rawValue)
-        toSave.is_old = dog.isOld
-        toSave.is_nautered = dog.isNautered
-        return toSave
-    }
-    
-    
-    func remove(dog: Dog) -> Bool {
-        viewContext.delete(dog)
-        return save()
-    }
-    
-    func put(dog: EDog) -> Bool {
-        let _ = toDog(dog: dog)
+    func remove(t: T) -> Bool {
+        viewContext.delete(t)
         return save()
     }
     
@@ -153,15 +135,47 @@ class DogManipulator {
             print("ignoring error while saving: \(error)")
             return false
         }
-        
+    }
+    
+    func withConext(f: (NSManagedObjectContext) -> T) -> T{
+        return f(viewContext)
     }
 }
 
-extension DogFetcher: NSFetchedResultsControllerDelegate {
-  func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    guard let nDogs = controller.fetchedObjects as? [Dog]
-      else { return }
-
-    dogs = nDogs
-  }
+class DogManipulator: Manipulator<Dog> {
+    
+    
+    
+    func toDog(dog: EDog) -> Dog {
+        let toSave = Dog(context: viewContext)
+        toSave.id = dog.id
+        toSave.name = dog.name
+        
+        toSave.weight = MeasurementData(context: viewContext)
+        toSave.weight?.id = dog.id
+        toSave.weight?.value = dog.weight.value
+        toSave.weight?.symbol = dog.weight.unit.symbol
+        
+        toSave.birthdate = dog.birthDate
+        toSave.size = Int16(dog.size.rawValue)
+        toSave.is_old = dog.isOld
+        toSave.is_nautered = dog.isNautered
+        toSave.activity_hours = dog.activityHours
+        return toSave
+    }
+    
+    
+    
+    
+    func put(dog: EDog) -> Dog? {
+        let d = toDog(dog: dog)
+        if save() {
+            return d
+        }
+        return nil
+        
+    }
+    
+    
 }
+

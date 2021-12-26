@@ -1,30 +1,45 @@
 import SwiftUI
 
 extension EDog {
-    func toBCDDogAlgaePowder()  -> (bcd_dog, bcd_algae_powder) {
+    func toBCDDogAlgaePowder()  -> bcd_dog {
         let d = self
         let bd = d.birthDate
+        
         let components = Calendar.current
             .dateComponents([.day], from: bd, to: Date())
-        let example_dog = bcd_dog(
+        
+        return bcd_dog(
             size: d.size,
             age: UInt32(components.day ?? 0 ),
             age_unit: bcd_day,
             weight: Float(d.weight.value),
-            weight_unit: bcd_weight_unit(UInt32(d.weight.unit.toBCDUnit())),
+            weight_unit: d.weight.unit.toBCDUnit(),
             activity_level_in_hours: UInt32(d.activityHours),
             is_nautered: Int32(d.isNautered ? 1 : 0 ),
             is_old: Int32(d.isOld ? 1 : 0)
         )
         
-        let example_algae_poweder = bcd_algae_powder(
-            jod: UInt32(d.jod.value),
-            per: UInt32(d.jodPer.value),
-            jod_weight_unit: bcd_weight_unit(UInt32(d.jod.unit.toBCDUnit())),
-            per_unit: bcd_weight_unit(UInt32(d.jodPer.unit.toBCDUnit()))
+    }
+}
+
+extension JodData {
+    func toBCD() -> bcd_algae_powder {
+        if let val = value?.measurement() {
+            if let per = per?.measurement() {
+                return bcd_algae_powder(
+                    jod: UInt32(val.value),
+                    per: UInt32(per.value),
+                    jod_weight_unit: val.unit.toBCDUnit(),
+                    per_unit: per.unit.toBCDUnit()
+                )
+            }
+        }
+        return bcd_algae_powder(jod: 0,
+                                per: 0,
+                                jod_weight_unit: bcd_kilo_gram,
+                                per_unit: bcd_kilo_gram
         )
         
-        return (example_dog, example_algae_poweder)
     }
 }
 
@@ -43,7 +58,7 @@ fileprivate struct RecommendationView: View {
             Text(title)
             Spacer()
             if let t = total {
-                Text("\(t.value.printround(to: 2))") + Text(" \(t.unit.symbol)").foregroundColor(.secondary)
+                Text(t.formatted(.measurement(width: .abbreviated)))
             }
         }
         
@@ -54,7 +69,7 @@ fileprivate struct RecommendationView: View {
                     HStack {
                         Text("\(v.name)")
                         Spacer()
-                        Text("\(v.value.value.printround(to: 2))") + Text(" \(v.value.unit.symbol)").foregroundColor(.secondary)
+                        Text(v.value.formatted(.measurement(width: .abbreviated)))
                         
                     }.padding(.leading)
                 }
@@ -63,7 +78,27 @@ fileprivate struct RecommendationView: View {
     }
     
     
+    
+}
 
+extension bcd_algae_powder: Equatable, Hashable {
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(jod)
+        hasher.combine(per)
+        hasher.combine(jod_weight_unit.rawValue)
+        hasher.combine(per_unit.rawValue)
+    }
+    
+    
+    public static func == (lhs: bcd_algae_powder, rhs: bcd_algae_powder) -> Bool {
+        return lhs.jod == rhs.jod &&
+        lhs.per == rhs.per &&
+        lhs.jod_weight_unit.rawValue == rhs.jod_weight_unit.rawValue &&
+        lhs.per_unit.rawValue == rhs.per_unit.rawValue
+    }
+    
+    
 }
 
 struct FoodPlan: View {
@@ -83,6 +118,10 @@ struct FoodPlan: View {
     }
     
     let dog: EDog
+    
+    @State var jod: bcd_algae_powder
+    var jodData: [JodData]
+    
     
     
     
@@ -160,11 +199,11 @@ struct FoodPlan: View {
         return result
     }
     
-    private func food_plan(t: (bcd_dog, bcd_algae_powder), ppd: UInt32) -> FoodPlan {
-        var dog = t.0
-        var ap = t.1
+    private func food_plan(dog: bcd_dog, ap: bcd_algae_powder, ppd: UInt32) -> FoodPlan {
+        var d = dog
+        var a = ap
         
-        let ptr = calculate_recommendation(&dog, &ap)
+        let ptr = calculate_recommendation(&d, &a)
         bcd_recommendation_for_span(1, bcd_week, ptr)
         
         let portions = bcd_food_plan(1, bcd_week, ppd, ptr)
@@ -258,15 +297,35 @@ struct FoodPlan: View {
     
     @State var pageIndex = Calendar.current.component(.weekday, from: Date()) - 1
     
+    private func jodText(jod: JodData) -> Text {
+        let jm = jod.value?.measurement() ?? Measurement(value: 0, unit: .milligrams)
+        let jp = jod.per?.measurement() ?? Measurement(value: 0, unit: .kilograms)
+        return Text("\(jod.name ?? "") (") +
+        Text(jm.formatted(.measurement(width: .narrow))) +
+        Text(" / ").foregroundColor(.secondary) +
+        Text(jp.formatted(.measurement(width: .narrow))) +
+        Text(")")
+    }
+    
+    init(dog: EDog, jodData: [JodData]) {
+        self.dog = dog
+        self.jodData = jodData
+        self._jod = State(wrappedValue: jodData.first?.toBCD() ?? bcd_algae_powder(jod: 631, per: 1, jod_weight_unit: bcd_milli_gram, per_unit: bcd_kilo_gram))
+    }
+    
     var body: some View {
         // For now add a weekly overview in the list
         let weekdays = (DateFormatter().weekdaySymbols ?? []) + [ "Weekly" ]
-        let fp = food_plan(t: dog.toBCDDogAlgaePowder(), ppd: 2)
         
-        return TabView(selection: $pageIndex) {
-            ForEach(weekdays.indices){ index in
-                ScrollView {
-                    VStack(alignment: .leading) {
+        let fp = food_plan(dog: dog.toBCDDogAlgaePowder(),
+                           ap: jod ,
+                           ppd: 2)
+        
+        return VStack(alignment: .leading){
+            TabView(selection: $pageIndex) {
+                ForEach(weekdays.indices){ index in
+                    ScrollView {
+                        VStack(alignment: .leading) {
                             Text(weekdays[index]).padding(.leading)
                             if index != weekdays.count - 1 {
                                 let i = weekDayToRecomendationIndex(d: index)
@@ -274,15 +333,35 @@ struct FoodPlan: View {
                             } else {
                                 portionView(p: fp.weekly)
                             }
-                    }
-                }.tag(index)
+                        }
+                    }.tag(index)
+                }
             }
         }
         
+        .navigationTitle(dog.name)
         .tabViewStyle(.page)
         .indexViewStyle(.page(backgroundDisplayMode: .always))
         .toolbar{
             HStack {
+                if !jodData.isEmpty {
+                Menu{
+                        Menu("Algae Powder") {
+                            
+                            Picker("Algae Powder", selection: $jod) {
+                                ForEach(jodData) {
+                                    jodText(jod: $0).tag($0.toBCD())
+                                }
+                            }
+                        }.pickerStyle(.automatic)
+                    
+                    
+                } label: {
+                    Image(systemName: "gear")
+                }
+                }
+                
+                
                 Button(action: {
                     pageIndex = Calendar.current.component(.weekday, from: Date()) - 1
                 }){
@@ -293,6 +372,9 @@ struct FoodPlan: View {
                 }){
                     Image(systemName: "list.bullet")
                 }
+                
+                
+                
             }
         }
         
@@ -303,8 +385,23 @@ struct FoodPlan_Previews: PreviewProvider {
     static var previews: some View {
         
         let vc = PersistenceController.preview.container.viewContext
-        let dog = Dog(context: vc)
-        PersistenceController.ExtendDog(newItem: dog, i: 1)
-        return FoodPlan(dog: dog.toEdog())
+        let dog = PersistenceController.NewDog(vc: vc, i: 1)
+        let value = MeasurementData(context: vc)
+        value.id = UUID()
+        value.value = 631
+        value.symbol = "mg"
+        let per = MeasurementData(context: vc)
+        per.id = UUID()
+        per.value = 1
+        per.symbol = "kg"
+        
+        let jod = JodData(context: vc)
+        
+        jod.name = "test"
+        jod.value = value
+        jod.per = per
+        return NavigationView {
+            FoodPlan(dog: dog.toEdog(), jodData: [jod])
+        }
     }
 }

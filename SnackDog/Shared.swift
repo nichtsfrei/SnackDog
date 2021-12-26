@@ -12,28 +12,29 @@ enum ViewState: Int {
     case overview = 0, add, edit, delete, foodplan
 }
 
+enum KindState: Int {
+    case dogs = 0, algae
+}
 
 
 class Shared: ObservableObject {
     
+    @Published var kindState: KindState? = .dogs
     @Published var viewstate: ViewState? = .overview
-    
     @Published var selected: Dog? = nil
+    @ObservedObject var dogFetcher: Fetcher<Dog>
+    var dogManipulator: DogManipulator
     
-    @ObservedObject var fetcher: DogFetcher
-    
-    var manipulator: DogManipulator
-    
-    init(fetcher: DogFetcher, manipulator: DogManipulator) {
-        self.fetcher = fetcher
-        self.manipulator = manipulator
-        if fetcher.dogs.count > 0 {
-            self.selected = fetcher.dogs[0]
+    init(fetcher: Fetcher<Dog>, manipulator: DogManipulator) {
+        self.dogFetcher = fetcher
+        self.dogManipulator = manipulator
+        if fetcher.data.count > 0 {
+            self.selected = fetcher.data[0]
         }
-        if fetcher.dogs.count == 1 {
+        if fetcher.data.count == 1 {
             self.viewstate = .foodplan
         }
-        if fetcher.dogs.count == 0 {
+        if fetcher.data.count == 0 {
             self.viewstate = .add
         }
     }
