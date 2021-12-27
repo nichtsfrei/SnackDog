@@ -7,7 +7,7 @@
         <attribute name="is_nautered" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="is_old" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="size" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="typus" optional="YES" attributeType="String"/>
         <relationship name="weight" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MeasurementData" inverseName="weight" inverseEntity="MeasurementData"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
@@ -47,7 +47,7 @@
     </entity>
     <elements>
         <element name="Dog" positionX="-63" positionY="-18" width="128" height="149"/>
-        <element name="MeasurementData" positionX="-63" positionY="81" width="128" height="119"/>
         <element name="JodData" positionX="-54" positionY="90" width="128" height="89"/>
+        <element name="MeasurementData" positionX="-63" positionY="81" width="128" height="119"/>
     </elements>
 </model>

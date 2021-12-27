@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct UnitMassPicker: View {
-    let aha = String.supportedMassUnits.keys.sorted()
+    let symbols: [String] = String.supportedMassUnits.keys.map {
+        return $0
+    }
     @State var symbol: String
     
     init(symbol: String) {
@@ -10,7 +12,7 @@ struct UnitMassPicker: View {
     
     var body: some View {
         Picker("", selection: $symbol) {
-            ForEach(aha, id: \.self) {
+            ForEach(symbols, id: \.self) {
                 Text($0)
             }
         }
@@ -152,7 +154,7 @@ struct AlgaePowderView: View {
     init(jodFetcher: Fetcher<JodData>, manipulator: Manipulator<JodData>) {
         self._fetcher = StateObject(wrappedValue: jodFetcher)
         self.manipulator = manipulator
-        self.isAddViewActive = jodFetcher.data.isEmpty
+        self.isAddViewActive = false
         
     }
     

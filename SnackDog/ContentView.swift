@@ -1,29 +1,18 @@
 import SwiftUI
 
-extension Double {
-    func printround(to: Int) -> String {
-        return String(format: "%.\(to)f", self)
-    }
-}
-
-extension Float {
-    func printround(to: Int) -> String {
-        return String(format: "%.\(to)f", self)
-    }
-}
-
 extension String {
-    static let supportedMassUnits: [String: UnitMass] = [
+    static let supportedMassUnits: [String: UnitMass] =
+    Locale.current.usesMetricSystem ? [
         "kg": .kilograms,
         "g": .grams,
-        "dg": .decigrams,
-        "cg": .centigrams,
         "mg": .milligrams,
         "µg": .micrograms,
         "ng": .nanograms,
-        "pg": .picograms,
-        "oz": .ounces,
+    ] : [
         "lb": .pounds,
+        "oz": .ounces,
+        "st": .stones,
+        "oz t": .ouncesTroy,
     ]
     func toUnitMass() -> UnitMass? {
         
@@ -54,7 +43,7 @@ extension Dog {
             weight: dog.weight?.measurement() ?? Measurement(value: 0, unit: .kilograms) ,
             
             activityHours: dog.activity_hours,
-            size: bcd_dog_size(UInt32(dog.size)),
+            size: DogSize(rawValue: dog.typus ?? "small") ?? .small,
             isNautered: dog.is_nautered,
             isOld: dog.is_old
         )
@@ -72,16 +61,13 @@ struct Sidebar: View {
         let aF = Fetcher(managedObjectContext: refresh.dogManipulator.viewContext, basefetchRequest: JodData.fetchRequest())
         return List {
             NavigationLink(
-                destination: DogsView(shared: refresh),
-                tag: .dogs,
-                selection: $refresh.kindState
+                destination: DogsView(shared: refresh)
             ) {
-                Text("Dogs")
+                Text("Dogs (\(refresh.dogFetcher.data.count))")
+                
             }
             NavigationLink(
-                destination: AlgaePowderView.fromshared(shared: refresh),
-                tag: .algae,
-                selection: $refresh.kindState
+                destination: AlgaePowderView.fromshared(shared: refresh)
             ) {
                 Text("Algae Powder (\(aF.data.count))")
             }
@@ -108,7 +94,7 @@ struct ContentView: View {
             if refresh.dogFetcher.data.isEmpty {
                 DogEditView(refresh: refresh, dog: EDog.new())
             } else {
-                FoodPlan(dog: refresh.dogFetcher.data[0].toEdog(), jodData: jodFetcher.data)
+                FoodPlanView(dog: refresh.dogFetcher.data[0].toEdog(), jodData: jodFetcher.data)
             }
         }
     }

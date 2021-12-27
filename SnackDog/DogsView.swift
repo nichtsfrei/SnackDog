@@ -76,7 +76,7 @@ struct DogsView: View {
                 let dog = shared.selected?.toEdog() ?? EDog.new()
                 
                 NavigationLink(
-                    destination: FoodPlan(dog: dog, jodData:jodFetcher.data),
+                    destination: FoodPlanView(dog: dog, jodData:jodFetcher.data),
                     tag: .foodplan,
                     selection: $shared.viewstate
                 ) {

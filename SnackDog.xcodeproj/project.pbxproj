@@ -17,9 +17,10 @@
 		174F51542774DAB500FB76D5 /* SnackDogUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174F51532774DAB500FB76D5 /* SnackDogUITestsLaunchTests.swift */; };
 		174F51652774DBC700FB76D5 /* dog.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 174F51632774DBC700FB76D5 /* dog.xcdatamodeld */; };
 		174F51682774DC6600FB76D5 /* DogEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174F51662774DC6600FB76D5 /* DogEditView.swift */; };
-		174F51692774DC6600FB76D5 /* FoodPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174F51672774DC6600FB76D5 /* FoodPlan.swift */; };
+		174F51692774DC6600FB76D5 /* FoodPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174F51672774DC6600FB76D5 /* FoodPlanView.swift */; };
 		174F516E2774DCB600FB76D5 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174F516C2774DCB600FB76D5 /* Shared.swift */; };
-		174F516F2774DCB600FB76D5 /* simple_dog_barf.c in Sources */ = {isa = PBXBuildFile; fileRef = 174F516D2774DCB600FB76D5 /* simple_dog_barf.c */; };
+		1763D0142778F6F0002A35B8 /* Calculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1763D0132778F6F0002A35B8 /* Calculation.swift */; };
+		1763D0162778F752002A35B8 /* CalculationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1763D0152778F752002A35B8 /* CalculationTests.swift */; };
 		17D0B8D02775F38E008E20E3 /* DogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D0B8CF2775F38E008E20E3 /* DogsView.swift */; };
 		17D0B90D27766286008E20E3 /* AlgaePowderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D0B90C27766286008E20E3 /* AlgaePowderView.swift */; };
 /* End PBXBuildFile section */
@@ -55,11 +56,10 @@
 		174F51532774DAB500FB76D5 /* SnackDogUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackDogUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		174F51642774DBC700FB76D5 /* dog.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = dog.xcdatamodel; sourceTree = "<group>"; };
 		174F51662774DC6600FB76D5 /* DogEditView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DogEditView.swift; sourceTree = "<group>"; };
-		174F51672774DC6600FB76D5 /* FoodPlan.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodPlan.swift; sourceTree = "<group>"; };
-		174F516A2774DCB600FB76D5 /* SnackDog-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SnackDog-Bridging-Header.h"; sourceTree = "<group>"; };
-		174F516B2774DCB600FB76D5 /* simple_dog_barf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simple_dog_barf.h; sourceTree = "<group>"; };
+		174F51672774DC6600FB76D5 /* FoodPlanView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodPlanView.swift; sourceTree = "<group>"; };
 		174F516C2774DCB600FB76D5 /* Shared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shared.swift; sourceTree = "<group>"; };
-		174F516D2774DCB600FB76D5 /* simple_dog_barf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = simple_dog_barf.c; sourceTree = "<group>"; };
+		1763D0132778F6F0002A35B8 /* Calculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calculation.swift; sourceTree = "<group>"; };
+		1763D0152778F752002A35B8 /* CalculationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculationTests.swift; sourceTree = "<group>"; };
 		17D0B8CF2775F38E008E20E3 /* DogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsView.swift; sourceTree = "<group>"; };
 		17D0B90C27766286008E20E3 /* AlgaePowderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlgaePowderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -113,7 +113,8 @@
 			isa = PBXGroup;
 			children = (
 				174F51662774DC6600FB76D5 /* DogEditView.swift */,
-				174F51672774DC6600FB76D5 /* FoodPlan.swift */,
+				174F51672774DC6600FB76D5 /* FoodPlanView.swift */,
+				1763D0132778F6F0002A35B8 /* Calculation.swift */,
 				174F51312774DAB400FB76D5 /* SnackDogApp.swift */,
 				174F51332774DAB400FB76D5 /* ContentView.swift */,
 				17D0B8CF2775F38E008E20E3 /* DogsView.swift */,
@@ -122,10 +123,7 @@
 				174F513A2774DAB500FB76D5 /* Persistence.swift */,
 				174F51632774DBC700FB76D5 /* dog.xcdatamodeld */,
 				174F516C2774DCB600FB76D5 /* Shared.swift */,
-				174F516D2774DCB600FB76D5 /* simple_dog_barf.c */,
-				174F516B2774DCB600FB76D5 /* simple_dog_barf.h */,
 				174F51372774DAB500FB76D5 /* Preview Content */,
-				174F516A2774DCB600FB76D5 /* SnackDog-Bridging-Header.h */,
 			);
 			path = SnackDog;
 			sourceTree = "<group>";
@@ -141,6 +139,7 @@
 		174F51462774DAB500FB76D5 /* SnackDogTests */ = {
 			isa = PBXGroup;
 			children = (
+				1763D0152778F752002A35B8 /* CalculationTests.swift */,
 				174F51472774DAB500FB76D5 /* SnackDogTests.swift */,
 			);
 			path = SnackDogTests;
@@ -288,14 +287,14 @@
 			files = (
 				174F516E2774DCB600FB76D5 /* Shared.swift in Sources */,
 				174F51652774DBC700FB76D5 /* dog.xcdatamodeld in Sources */,
+				1763D0142778F6F0002A35B8 /* Calculation.swift in Sources */,
 				17D0B90D27766286008E20E3 /* AlgaePowderView.swift in Sources */,
 				174F51682774DC6600FB76D5 /* DogEditView.swift in Sources */,
 				174F513B2774DAB500FB76D5 /* Persistence.swift in Sources */,
 				174F51342774DAB400FB76D5 /* ContentView.swift in Sources */,
-				174F51692774DC6600FB76D5 /* FoodPlan.swift in Sources */,
+				174F51692774DC6600FB76D5 /* FoodPlanView.swift in Sources */,
 				17D0B8D02775F38E008E20E3 /* DogsView.swift in Sources */,
 				174F51322774DAB400FB76D5 /* SnackDogApp.swift in Sources */,
-				174F516F2774DCB600FB76D5 /* simple_dog_barf.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,6 +303,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				174F51482774DAB500FB76D5 /* SnackDogTests.swift in Sources */,
+				1763D0162778F752002A35B8 /* CalculationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

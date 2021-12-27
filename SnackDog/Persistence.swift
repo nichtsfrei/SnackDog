@@ -14,7 +14,7 @@ struct PersistenceController {
         let newItem = Dog(context: vc)
         newItem.name = "name \(i)"
         newItem.activity_hours = Int16(i + 1)
-        newItem.size = Int16(i % 3)
+        newItem.typus = DogSize.medium.rawValue
         do {
             try newItem.birthdate = Date("2020-11-08T21:25:11Z", strategy: .iso8601)
             newItem.id = UUID()
@@ -72,7 +72,9 @@ struct PersistenceController {
                  * The store could not be migrated to the current model version.
                  Check the error message to determine what the actual problem was.
                  */
+                
                 fatalError("Unresolved error \(error), \(error.userInfo)")
+                
             }
             
             
@@ -157,7 +159,7 @@ class DogManipulator: Manipulator<Dog> {
         toSave.weight?.symbol = dog.weight.unit.symbol
         
         toSave.birthdate = dog.birthDate
-        toSave.size = Int16(dog.size.rawValue)
+        toSave.typus = dog.size.rawValue
         toSave.is_old = dog.isOld
         toSave.is_nautered = dog.isNautered
         toSave.activity_hours = dog.activityHours
