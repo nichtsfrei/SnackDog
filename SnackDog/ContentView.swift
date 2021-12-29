@@ -52,24 +52,22 @@ extension Dog {
 
 struct Sidebar: View {
     
-    @StateObject var refresh: Shared
-    
+    @Environment(\.managedObjectContext) private var viewContext
     
     
     
     var body: some View {
-        let aF = Fetcher(managedObjectContext: refresh.dogManipulator.viewContext, basefetchRequest: JodData.fetchRequest())
         return List {
             NavigationLink(
-                destination: DogsView(shared: refresh)
+                destination: DogsView()
             ) {
-                Text("Dogs (\(refresh.dogFetcher.data.count))")
+                Text("Dogs")
                 
             }
             NavigationLink(
-                destination: AlgaePowderView.fromshared(shared: refresh)
+                destination: AlgaePowderView( )
             ) {
-                Text("Algae Powder (\(aF.data.count))")
+                Text("Algae Powder")
             }
         }.listStyle(SidebarListStyle())
     }
@@ -77,24 +75,22 @@ struct Sidebar: View {
 
 struct ContentView: View {
     
-    @StateObject var refresh: Shared
-    var jodFetcher: Fetcher<JodData>
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Dog.name, ascending: true)],
+        animation: .default)
+    private var dogs: FetchedResults<Dog>
     
-    init(refresh: Shared) {
-        self._refresh = StateObject(wrappedValue: refresh)
-        jodFetcher = Fetcher(managedObjectContext: refresh.dogManipulator.viewContext, basefetchRequest: JodData.fetchRequest())
-        
-    }
+   
     
     var body: some View {
         
         return NavigationView {
-            Sidebar(refresh: refresh)
-            DogsView(shared: refresh)
-            if refresh.dogFetcher.data.isEmpty {
-                DogEditView(refresh: refresh, dog: EDog.new())
+            Sidebar()
+            DogsView()
+            if dogs.isEmpty {
+                DogEditView()
             } else {
-                FoodPlanView(dog: refresh.dogFetcher.data[0].toEdog(), jodData: jodFetcher.data)
+                FoodPlanView(dog: dogs.first!.toEdog())
             }
         }
     }
@@ -103,12 +99,8 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let vc = PersistenceController.preview.container.viewContext
-        let shared = Shared(
-            fetcher: Fetcher<Dog>(managedObjectContext: vc, basefetchRequest: Dog.fetchRequest()),
-            manipulator: DogManipulator(context: vc)
-        )
-        
-        ContentView(refresh: shared)
+        ContentView()
+            .environment(\.managedObjectContext, vc)
             .previewDevice("iPhone 13 mini")
     }
 }

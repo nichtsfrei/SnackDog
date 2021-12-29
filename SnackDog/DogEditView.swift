@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct EDog {
+struct EDog: Equatable {
     var id: UUID
     var name: String
     var birthDate: Date
@@ -9,9 +9,7 @@ struct EDog {
     var size: DogSize
     var isNautered: Bool
     var isOld: Bool
-}
-
-extension EDog: Equatable {
+    
     static func == (a: EDog, b: EDog) -> Bool {
         return a.id == b.id &&
         a.name == b.name &&
@@ -38,19 +36,28 @@ extension EDog: Equatable {
 
 struct DogEditView: View {
     
-    @StateObject var refresh: Shared
-    
+    @Environment(\.managedObjectContext) private var viewContext
     
     @State var dog: EDog
     @State var weightUnit: UnitMass
+    @Binding var selected: Dog?
+    @Binding var viewState: ViewState?
     
-    init(refresh: Shared, dog: EDog) {
-        self._refresh = StateObject(wrappedValue: refresh)
-        self._dog = State(wrappedValue: dog)
+    
+    init(selected: Binding<Dog?>, viewState: Binding<ViewState?>) {
+        let workingCopy = selected.wrappedValue?.toEdog() ?? EDog.new()
+        self._dog = State(wrappedValue: workingCopy)
+        self._selected = selected
+        self._viewState = viewState
+        self._weightUnit = State(wrappedValue: workingCopy.weight.unit)
         
-        self._weightUnit = State(wrappedValue: dog.weight.unit)
-        
-        
+    }
+    
+    init() {
+        self._dog = State(wrappedValue: EDog.new())
+        self._weightUnit = State(wrappedValue: .kilograms)
+        self._selected = Binding{ return nil } set: { _ in return }
+        self._viewState = Binding{ return nil } set: { _ in return }
     }
     
     let allowedWeight: [UnitMass] = [
@@ -60,8 +67,42 @@ struct DogEditView: View {
         UnitMass.micrograms
     ]
     
+    
+    func setDog(_ toSave: Dog) {
+        toSave.name = dog.name
+        if toSave.weight == nil {
+            toSave.weight = MeasurementData(context: viewContext)
+            toSave.weight?.id = dog.id
+        }
+        toSave.weight?.value = dog.weight.value
+        toSave.weight?.symbol = dog.weight.unit.symbol
+        
+        toSave.birthdate = dog.birthDate
+        toSave.typus = dog.size.rawValue
+        toSave.is_old = dog.isOld
+        toSave.is_nautered = dog.isNautered
+        toSave.activity_hours = dog.activityHours
+        
+        
+    }
+    
     private func save() {
-        let _ = refresh.dogManipulator.put(dog: dog)
+        if let toSave = selected {
+            setDog(toSave)
+        } else {
+            let toSave = Dog(context: viewContext)
+            toSave.id = dog.id
+            setDog(toSave)
+            selected = toSave
+        }
+        do {
+            try viewContext.save()
+            
+        } catch {
+            print("ignoring error \(error)")
+        }
+        viewState = .foodplan
+        
     }
     
     var body: some View {
@@ -77,9 +118,7 @@ struct DogEditView: View {
             HStack {
                 TextField("Name", text: $dog.name)
                 DatePicker(selection: $dog.birthDate, displayedComponents: .date, label: { Text("") })
-                
             }
-            // TODO change dog.size to string instead of int
             Picker(dog.size.rawValue,
                    selection: $dog.size) {
                 ForEach(sizes, id: \.rawValue) { index in
@@ -112,20 +151,19 @@ struct DogEditView: View {
                 TextField("Hours", value: $dog.activityHours, format: .number)
             }
             
-
+            
         }.onChange(of: weightUnit){ njwu in
             let previous = dog.weight
             dog.weight = Measurement(value: previous.value, unit: njwu)
             
         }.onSubmit {
             save()
-            refresh.viewstate = .foodplan
+            
         }
         .toolbar{
             HStack {
                 Button(action: {
                     save()
-                    refresh.viewstate = .foodplan
                 }) {
                     Image(systemName: "checkmark.square")
                 }
@@ -138,14 +176,19 @@ struct DogEditView: View {
 struct EditView_Previews: PreviewProvider {
     static var previews: some View {
         let vc = PersistenceController.preview.container.viewContext
-        let dog = PersistenceController.NewDog(vc: vc, i: 1)
-        let shared = Shared(
-            fetcher: Fetcher<Dog>(managedObjectContext: vc, basefetchRequest: Dog.fetchRequest()),
-            manipulator: DogManipulator(context: vc)
-        )
-        return DogEditView(
-            refresh: shared,
-            dog: dog.toEdog()
-        ).environment(\.managedObjectContext, vc)
+        let dog: Dog? = PersistenceController.NewDog(vc: vc, i: 1)
+        
+        let bDog: Binding<Dog?> = Binding{
+            return dog
+        } set: { _ in
+            //
+        }
+        let bState: Binding<ViewState?> = Binding{
+            return nil
+        } set: { _ in
+            //
+        }
+        return DogEditView(selected: bDog, viewState: bState)
+            .environment(\.managedObjectContext, vc)
     }
 }

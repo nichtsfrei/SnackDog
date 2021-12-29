@@ -185,6 +185,29 @@ class Need: Identifiable, Hashable {
         hasher.combine(automatic)
     }
     
+    func copy(
+        id: UUID? = UUID(),
+        name: String? = nil,
+        category: Category? = nil ,
+        percentage: Double? = nil,
+        basedOn: Int? = nil,
+        days: [Int]? = nil,
+        portions: [Int]? = nil,
+        automatic: Bool? = nil
+    ) -> Need {
+        let of = self
+        return Need(
+            id: id ?? of.id,
+            name: name ?? of.name,
+            category: category ?? of.category,
+            percentage: percentage ?? of.percentage,
+            basedOn: basedOn ?? of.basedOn,
+            days: days ?? of.days,
+            portions: portions ?? of.portions,
+            automatic: automatic ?? of.automatic)
+        
+    }
+    
     static func == (lhs: Need, rhs: Need) -> Bool {
         return lhs.id == rhs.id &&
         lhs.name == rhs.name &&
@@ -257,7 +280,24 @@ class FoodBasePlan: Hashable, Identifiable {
         .fat,
     ])
     
-    static let separatedInsides: FoodBasePlan = FoodBasePlan(name: "With default insides", needs: [
+    
+    static func onlyWeakBones(basedOn: FoodBasePlan) -> FoodBasePlan {
+        
+        let needs: [Need] = basedOn.needs.map {
+            
+            if $0 == Need.rumen {
+                return $0.copy(percentage:0.15)
+            }
+            if $0 == Need.bones {
+                return $0.copy(percentage: 0.20)
+            }
+            return $0
+        }
+        return FoodBasePlan(name: "\(basedOn.name) only weak bones (e.g. chicken)", needs: needs)
+    }
+    static let summarizedInsidesOnlyWeakBones: FoodBasePlan = onlyWeakBones(basedOn: FoodBasePlan.summarizedInsides)
+    
+    static let separatedInsides: FoodBasePlan = FoodBasePlan(name: "Insides", needs: [
         .scallop,
         .rumen,
         .liver,
@@ -273,6 +313,7 @@ class FoodBasePlan: Hashable, Identifiable {
         .omega3Oil,
         .fat,
     ])
+    static let separatedInsidesOnlyWeakBones: FoodBasePlan = onlyWeakBones(basedOn: FoodBasePlan.separatedInsides)
 }
 
 struct Recommendation <T: Unit>: Identifiable{

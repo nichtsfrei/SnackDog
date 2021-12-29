@@ -37,37 +37,52 @@ struct JodDataView: GroupBoxStyle {
                 configuration.content
             }
         }
+        
     }
 }
 
 struct AlgaePowderView: View {
     
+    
+    
     struct SingleView: View {
+        @Environment(\.managedObjectContext) private var viewContext
         let data: JodData
         
         @State var isAddViewActive: Bool = false
-        let manipulator: Manipulator<JodData>
+        
         var body: some View {
             return GroupBox {
                     Button(action: {
-                        let _ = manipulator.remove(t: data)
+                        do {
+                            viewContext.delete(data)
+                            try viewContext.save()
+                        } catch {
+                            print("ignoring \(error)")
+                        }
                     }) {
                         Image(systemName: "trash")
                     }
                     NavigationLink(
-                        destination: EditView(manipulator: manipulator, jod: data, view: $isAddViewActive),
-                        isActive: $isAddViewActive) {
+                        destination: EditView(jod: data, view: $isAddViewActive).navigationBarTitle("Edit"),
+                        isActive: $isAddViewActive
+                    ) {
                         Image(systemName: "square.and.pencil")
                     }
                 
-            }.groupBoxStyle(JodDataView(data: data))
+            }
+            .onLongPressGesture {
+               isAddViewActive = true
+            }
+            .groupBoxStyle(JodDataView(data: data))
+             
         }
-        
     }
     
     
     struct EditView: View {
-        let manipulator: Manipulator<JodData>
+        @Environment(\.managedObjectContext) private var viewContext
+        
         var data: JodData?
         @State var value: Double
         @State var symbol: String
@@ -76,37 +91,56 @@ struct AlgaePowderView: View {
         @State var name: String
         @Binding var view: Bool
         
-        init(manipulator: Manipulator<JodData>, jod: JodData?, view: Binding<Bool>) {
+        init(jod: JodData?, view: Binding<Bool>) {
             self.data = jod
             self.value = jod?.value?.value ?? 631
             self.symbol = jod?.value?.symbol ?? "mg"
             self.perValue = jod?.per?.value ?? 1
             self.perSymbol = jod?.per?.symbol ?? "kg"
             self.name = jod?.name ?? ""
-            self.manipulator = manipulator
             self._view = view
         }
         
-        func save() -> Bool {
-            let _ = manipulator.withConext{
-                let jd = JodData(context: $0)
-                jd.id = data?.id ?? UUID()
+        func jodData() -> JodData {
+            if let jd = data {
+                return jd
+            }
+            let jd = JodData(context: viewContext)
+            jd.id = UUID()
+            return jd
+        }
+        
+        func measurement(_ md: MeasurementData?) -> MeasurementData {
+            if let d = md {
+                return d
+            }
+            let d = MeasurementData(context: viewContext)
+            d.id = UUID()
+            return d
+        }
+        
+        
+        func save() {
+            let jd =  jodData()
+                    
                 jd.name = name
-                let jm = MeasurementData(context: $0)
-                jm.id = UUID()
+            let jm = measurement(jd.value)
                 jm.value = value
                 jm.symbol = symbol
-                let jp = MeasurementData(context: $0)
+            let jp = measurement(jd.per)
                 jp.id = UUID()
                 jp.value = perValue
                 jp.symbol = perSymbol
                 jd.value = jm
                 jd.per = jp
-                return jd
+            do {
+                try viewContext.save()
                 
+            } catch {
+                print ("ignoring \(error)")
             }
+            view = false
             
-            return manipulator.save()
         }
         
         var body: some View {
@@ -131,67 +165,53 @@ struct AlgaePowderView: View {
             }.toolbar{
                 HStack {
                     Button(action: {
-                        let _ = save()
-                        view = false
+                        save()
                     }) {
                         Image(systemName: "checkmark.square")
                     }
                 }
                 
             }.onSubmit {
-                if save() {
-                    view = false
-                }
+                save()
             }
         }
     }
     
-    @StateObject var fetcher: Fetcher<JodData>
-    let manipulator: Manipulator<JodData>
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \JodData.name, ascending: true)],
+        animation: .default)
+    private var jodData: FetchedResults<JodData>
     
-    @State var isAddViewActive: Bool
+    @Environment(\.managedObjectContext) private var viewContext
     
-    init(jodFetcher: Fetcher<JodData>, manipulator: Manipulator<JodData>) {
-        self._fetcher = StateObject(wrappedValue: jodFetcher)
-        self.manipulator = manipulator
-        self.isAddViewActive = false
-        
-    }
     
+    @State var isAddViewActive: Bool = false
     
     var body: some View {
-        List{
-            ForEach(fetcher.data) { jod in
-                SingleView(data: jod, manipulator: manipulator)
+        return List{
+            ForEach(jodData) { jod in
+                SingleView(data: jod)
             }
         }
         .toolbar{
             NavigationLink(
-                destination: EditView(manipulator: manipulator, jod: nil, view: $isAddViewActive),
+                destination:
+                    EditView(jod: nil, view: $isAddViewActive).navigationTitle("Add"),
                 isActive: $isAddViewActive) {
                 Image(systemName: "plus.app")
             }
+            
         }
         .navigationTitle("Algae Powder")
     }
-    
-    static func fromshared(shared: Shared) -> AlgaePowderView {
-        let context = shared.dogManipulator.viewContext
-        return AlgaePowderView(
-            jodFetcher: Fetcher(managedObjectContext: context, basefetchRequest: JodData.fetchRequest()),
-            manipulator: Manipulator(context: context)
-        )
-    }
-    
     
 }
 
 struct JodView_Previews: PreviewProvider {
     static var previews: some View {
         let vc = PersistenceController.preview.container.viewContext
-        let jf = Fetcher<JodData>(managedObjectContext: vc, basefetchRequest: JodData.fetchRequest())
         NavigationView {
-            AlgaePowderView(jodFetcher: jf, manipulator: Manipulator(context: vc))
+            AlgaePowderView().environment(\.managedObjectContext, vc)
         }
     }
 }

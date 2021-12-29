@@ -46,6 +46,8 @@ struct AlgaePowder: Identifiable, Hashable {
     let per: Measurement<UnitMass>
     
     
+    
+    
     static func from(jodData: JodData?) -> AlgaePowder {
         return AlgaePowder(
             id: jodData?.id ?? UUID(),
@@ -58,13 +60,21 @@ struct AlgaePowder: Identifiable, Hashable {
 
 struct FoodPlanView: View {
     
-    let dog: EDog
-    let basePlans: [FoodBasePlan] = [ .summarizedInsides, .separatedInsides]
-    @State var plan: FoodBasePlan = .separatedInsides
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \JodData.name, ascending: true)],
+        animation: .default)
+    private var jodData: FetchedResults<JodData>
     
-    @State var jod: AlgaePowder
-    var jodData: [AlgaePowder]
+    @Environment(\.managedObjectContext) private var viewContext
+    
+    let dog: EDog
+    let basePlans: [FoodBasePlan] = [ .summarizedInsides, .summarizedInsidesOnlyWeakBones, .separatedInsides, .separatedInsidesOnlyWeakBones]
+    @State var plan: FoodBasePlan = .summarizedInsides
+    
+    @State var jod: AlgaePowder? = nil
+    
     let weekdays = (DateFormatter().weekdaySymbols ?? []) + [ "Weekly" ]
+    
     
     
     
@@ -123,10 +133,8 @@ struct FoodPlanView: View {
         Text(")")
     }
     
-    init(dog: EDog, jodData: [JodData]) {
+    init(dog: EDog) {
         self.dog = dog
-        self.jodData = jodData.map { AlgaePowder.from(jodData: $0)}
-        self._jod = State(wrappedValue: AlgaePowder.from(jodData: jodData.first))
     }
     
     var body: some View {
@@ -134,7 +142,7 @@ struct FoodPlanView: View {
         
         let fp = FoodCalculation(
             dog: dog,
-            jd: jod,
+            jd: jod ?? AlgaePowder.from(jodData: nil),
             plan: plan).calculate()
         
         return VStack(alignment: .leading){
@@ -170,7 +178,7 @@ struct FoodPlanView: View {
                             
                             Picker("Algae Powder", selection: $jod) {
                                 ForEach(jodData) {
-                                    jodText(jod: $0).tag($0)
+                                    jodText(jod: AlgaePowder.from(jodData: $0)).tag(AlgaePowder.from(jodData: $0))
                                 }
                             }
                         }.pickerStyle(.automatic)
@@ -227,7 +235,7 @@ struct FoodPlan_Previews: PreviewProvider {
         jod.value = value
         jod.per = per
         return NavigationView {
-            FoodPlanView(dog: dog.toEdog(), jodData: [jod])
+            FoodPlanView(dog: dog.toEdog()).environment(\.managedObjectContext, vc)
         }
     }
 }

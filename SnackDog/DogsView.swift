@@ -1,15 +1,15 @@
-//
-//  DogsView.swift
-//  SnackDog
-//
-//  Created by Philipp on 24.12.21.
-//
-
 import SwiftUI
 
+enum ViewState: Int {
+    case overview = 0, add, edit, delete, foodplan
+}
+
 struct SingleDogView: View {
+    @Environment(\.managedObjectContext) private var viewContext
+    
     @State var dog: Dog
-    @StateObject var shared: Shared
+    @Binding var selected: Dog?
+    @Binding var viewState: ViewState?
     
     var body: some View {
         let formatter = DateFormatter()
@@ -28,24 +28,29 @@ struct SingleDogView: View {
                 Spacer()
                 
                 Button(action: {
-                    let _ = shared.dogManipulator.remove(t: dog)
-                    shared.viewstate = .overview
+                    viewContext.delete(dog)
+                    do {
+                        try viewContext.save()
+                    } catch {
+                        print("ignoring error while saving: \(error)")
+                    }
                 }) {
                     Image(systemName: "trash")
                 }
+                
                 Button(action: {
-                    shared.selected = dog
-                    shared.viewstate = .edit
+                    selected = dog
+                    viewState = .edit
                 }){
                     Image(systemName: "square.and.pencil")
                 }
             }
         }.onTapGesture {
-            shared.selected = dog
-            shared.viewstate = .foodplan
+            selected = dog
+            viewState = .foodplan
         }.onLongPressGesture{
-            shared.selected = dog
-            shared.viewstate = .edit
+            selected = dog
+            viewState = .edit
         }
         
     }
@@ -53,46 +58,49 @@ struct SingleDogView: View {
 
 struct DogsView: View {
     
-    @StateObject var shared: Shared
-    let jodFetcher: Fetcher<JodData>
     
-    init(shared: Shared) {
-        self._shared = StateObject(wrappedValue: shared)
-        self.jodFetcher = Fetcher(
-            managedObjectContext: shared.dogManipulator.viewContext,
-            basefetchRequest: JodData.fetchRequest()
-        )
-    }
+    
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Dog.name, ascending: true)],
+        animation: .default)
+    private var dogs: FetchedResults<Dog>
+    
+    
+    
+    @State var selected: Dog?
+    @State var viewstate: ViewState? = .overview
     
     var body: some View {
         List {
-            ForEach(shared.dogFetcher.data) { dog in
-                SingleDogView(dog: dog, shared: shared)
+            ForEach(dogs) { dog in
+                SingleDogView(dog: dog, selected: $selected, viewState: $viewstate)
             }
         }
         .navigationTitle("Dogs")
         .toolbar{
             HStack {
-                let dog = shared.selected?.toEdog() ?? EDog.new()
+                let dog = selected?.toEdog() ?? EDog.new()
                 
                 NavigationLink(
-                    destination: FoodPlanView(dog: dog, jodData:jodFetcher.data),
+                    destination: FoodPlanView(dog: dog),
                     tag: .foodplan,
-                    selection: $shared.viewstate
+                    selection: $viewstate
                 ) {
                     EmptyView()
                 }
                 NavigationLink(
-                    destination: DogEditView(refresh: shared, dog: EDog.new()).navigationTitle("Add"),
+                    destination: DogEditView(selected: $selected, viewState: $viewstate)
+                        .navigationTitle("Add"),
                     tag: .add,
-                    selection: $shared.viewstate
+                    selection: $viewstate
                 ) {
                     Image(systemName: "plus.app")
                 }
                 NavigationLink(
-                    destination: DogEditView(refresh: shared, dog: dog).navigationTitle("Edit"),
+                    destination: DogEditView(selected: $selected, viewState: $viewstate)
+                        .navigationTitle("Edit"),
                     tag: .edit,
-                    selection: $shared.viewstate
+                    selection: $viewstate
                 ) {
                     EmptyView()
                 }
@@ -105,12 +113,8 @@ struct DogsView: View {
 struct DogsView_Previews: PreviewProvider {
     static var previews: some View {
         let vc = PersistenceController.preview.container.viewContext
-        let shared = Shared(
-            fetcher: Fetcher<Dog>(managedObjectContext: vc, basefetchRequest: Dog.fetchRequest()),
-            manipulator: DogManipulator(context: vc)
-        )
         NavigationView {
-            DogsView(shared: shared)
+            DogsView().environment(\.managedObjectContext, vc)
         }
     }
 }
