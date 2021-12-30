@@ -24,7 +24,7 @@ class FoodBasePlan: Hashable, Identifiable {
         lhs.needs == rhs.needs
     }
     
-    static let summarizedInsides: FoodBasePlan = FoodBasePlan(name: "Summarized insides", needs: [
+    static let summarizedInsides: FoodBasePlan = FoodBasePlan(name: "summarized insides", needs: [
         .scallop,
         .rumen,
         .insides,
@@ -49,11 +49,11 @@ class FoodBasePlan: Hashable, Identifiable {
             }
             return $0
         }
-        return FoodBasePlan(name: "\(basedOn.name) only weak bones (e.g. chicken)", needs: needs)
+        return FoodBasePlan(name: "only weak bones with \(basedOn.name)", needs: needs)
     }
     static let summarizedInsidesOnlyWeakBones: FoodBasePlan = onlyWeakBones(basedOn: FoodBasePlan.summarizedInsides)
     
-    static let separatedInsides: FoodBasePlan = FoodBasePlan(name: "Insides", needs: [
+    static let separatedInsides: FoodBasePlan = FoodBasePlan(name: "insides", needs: [
         .scallop,
         .rumen,
         .liver,

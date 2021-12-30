@@ -35,7 +35,6 @@ fileprivate struct RecommendationView: Identifiable, View {
             }
         }
     }
-    
 }
 
 struct AlgaePowder: Identifiable, Hashable {
@@ -44,9 +43,6 @@ struct AlgaePowder: Identifiable, Hashable {
     
     let jod: Measurement<UnitMass>
     let per: Measurement<UnitMass>
-    
-    
-    
     
     static func from(jodData: JodData?) -> AlgaePowder {
         return AlgaePowder(
@@ -74,9 +70,6 @@ struct FoodPlanView: View {
     @State var jod: AlgaePowder? = nil
     
     let weekdays = (DateFormatter().weekdaySymbols ?? []) + [ "Weekly" ]
-    
-    
-    
     
     private let total_rec = {(x: Measurement<UnitMass>, y: Recommendation<UnitMass>) -> Measurement<UnitMass> in
         let m: Measurement<UnitMass> = y.value.converted(to: x.unit)
@@ -125,7 +118,7 @@ struct FoodPlanView: View {
     @State var pageIndex = Calendar.current.component(.weekday, from: Date()) - 1
     
     private func jodText(jod: AlgaePowder) -> Text {
-       
+        
         return Text("\(jod.name) (") +
         Text(jod.jod.formatted(.measurement(width: .narrow))) +
         Text(" / ").foregroundColor(.secondary) +
@@ -139,18 +132,21 @@ struct FoodPlanView: View {
     
     var body: some View {
         // For now add a weekly overview in the list
-        
+        let jd = jod ?? AlgaePowder.from(jodData: nil)
         let fp = FoodCalculation(
             dog: dog,
-            jd: jod ?? AlgaePowder.from(jodData: nil),
+            jd: jd,
             plan: plan).calculate()
         
         return VStack(alignment: .leading){
+            Text(plan.name).padding(.leading).foregroundColor(.secondary).font(.footnote)
+            Text("\(jd.name) Algae Powder").padding(.leading).foregroundColor(.secondary).font(.footnote)
+
             TabView(selection: $pageIndex) {
                 ForEach(weekdays.indices){ index in
-                    ScrollView {
-                        VStack(alignment: .leading) {
-                            Text(weekdays[index]).padding(.leading)
+                    VStack(alignment: .leading) {
+                        Text(weekdays[index]).padding(.leading).font(.title2)
+                        ScrollView {
                             if index != weekdays.count - 1 {
                                 let filtered: [Portion] = fp.days[index].filter { d in
                                     return d != nil
@@ -178,7 +174,7 @@ struct FoodPlanView: View {
                             
                             Picker("Algae Powder", selection: $jod) {
                                 ForEach(jodData) {
-                                    jodText(jod: AlgaePowder.from(jodData: $0)).tag(AlgaePowder.from(jodData: $0))
+                                    jodText(jod: AlgaePowder.from(jodData: $0)).tag(AlgaePowder.from(jodData: $0) as AlgaePowder?)
                                 }
                             }
                         }.pickerStyle(.automatic)
