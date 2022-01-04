@@ -37,39 +37,32 @@ fileprivate struct RecommendationView: Identifiable, View {
     }
 }
 
-struct AlgaePowder: Identifiable, Hashable {
-    let id: UUID
-    let name: String
-    
-    let jod: Measurement<UnitMass>
-    let per: Measurement<UnitMass>
-    
-    static func from(jodData: JodData?) -> AlgaePowder {
-        return AlgaePowder(
-            id: jodData?.id ?? UUID(),
-            name: jodData?.name ?? "Default",
-            jod: jodData?.value?.measurement() ?? Measurement(value: 631, unit: .milligrams),
-            per: jodData?.per?.measurement() ?? Measurement(value: 1, unit: .kilograms)
-        )
-    }
-}
+
 
 struct FoodPlanView: View {
     
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \JodData.name, ascending: true)],
-        animation: .default)
-    private var jodData: FetchedResults<JodData>
+    @State var fetcher: Fetcher<JodData>
     
-    @Environment(\.managedObjectContext) private var viewContext
+    let basePlans: [FoodBasePlan] = [
+        .summarizedInsides,
+        .summarizedInsidesOnlyWeakBones,
+        .separatedInsides,
+        .separatedInsidesOnlyWeakBones
+    ]
+    let weekdays = (DateFormatter().weekdaySymbols ?? []) + [ "Weekly" ]
     
     let dog: EDog
-    let basePlans: [FoodBasePlan] = [ .summarizedInsides, .summarizedInsidesOnlyWeakBones, .separatedInsides, .separatedInsidesOnlyWeakBones]
     @State var plan: FoodBasePlan = .summarizedInsides
     
-    @State var jod: AlgaePowder? = nil
+    @State var jod: AlgaePowder?
     
-    let weekdays = (DateFormatter().weekdaySymbols ?? []) + [ "Weekly" ]
+    init(dog: EDog, fetcher: Fetcher<JodData>) {
+        self.dog = dog
+        self._jod = State(wrappedValue: AlgaePowder.from(jodData: fetcher.data.first))
+        self._fetcher = State(wrappedValue: fetcher)
+    }
+    
+    
     
     private let total_rec = {(x: Measurement<UnitMass>, y: Recommendation<UnitMass>) -> Measurement<UnitMass> in
         let m: Measurement<UnitMass> = y.value.converted(to: x.unit)
@@ -126,10 +119,6 @@ struct FoodPlanView: View {
         Text(")")
     }
     
-    init(dog: EDog) {
-        self.dog = dog
-    }
-    
     var body: some View {
         // For now add a weekly overview in the list
         let jd = jod ?? AlgaePowder.from(jodData: nil)
@@ -139,8 +128,11 @@ struct FoodPlanView: View {
             plan: plan).calculate()
         
         return VStack(alignment: .leading){
-            Text(plan.name).padding(.leading).foregroundColor(.secondary).font(.footnote)
-            Text("\(jd.name) Algae Powder").padding(.leading).foregroundColor(.secondary).font(.footnote)
+            HStack {
+                Text("Plan: \(plan.name)").padding(.leading).foregroundColor(.secondary).font(.footnote)
+                Spacer()
+                Text("Algae Powder: \(jd.name)").padding(.leading).foregroundColor(.secondary).font(.footnote)
+            }
 
             TabView(selection: $pageIndex) {
                 ForEach(weekdays.indices){ index in
@@ -169,11 +161,11 @@ struct FoodPlanView: View {
         .toolbar{
             HStack {
                 Menu{
-                    if !jodData.isEmpty {
+                    if !fetcher.data.isEmpty {
                         Menu("Algae Powder") {
                             
                             Picker("Algae Powder", selection: $jod) {
-                                ForEach(jodData) {
+                                ForEach(fetcher.data) {
                                     jodText(jod: AlgaePowder.from(jodData: $0)).tag(AlgaePowder.from(jodData: $0) as AlgaePowder?)
                                 }
                             }
@@ -202,36 +194,9 @@ struct FoodPlanView: View {
                 }){
                     Image(systemName: "list.bullet")
                 }
-                
-                
-                
             }
         }
         
     }
 }
 
-struct FoodPlan_Previews: PreviewProvider {
-    static var previews: some View {
-        
-        let vc = PersistenceController.preview.container.viewContext
-        let dog = PersistenceController.NewDog(vc: vc, i: 1)
-        let value = MeasurementData(context: vc)
-        value.id = UUID()
-        value.value = 631
-        value.symbol = "mg"
-        let per = MeasurementData(context: vc)
-        per.id = UUID()
-        per.value = 1
-        per.symbol = "kg"
-        
-        let jod = JodData(context: vc)
-        
-        jod.name = "test"
-        jod.value = value
-        jod.per = per
-        return NavigationView {
-            FoodPlanView(dog: dog.toEdog()).environment(\.managedObjectContext, vc)
-        }
-    }
-}

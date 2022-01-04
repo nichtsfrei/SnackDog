@@ -24,7 +24,7 @@ class FoodBasePlan: Hashable, Identifiable {
         lhs.needs == rhs.needs
     }
     
-    static let summarizedInsides: FoodBasePlan = FoodBasePlan(name: "summarized insides", needs: [
+    static let summarizedInsides: FoodBasePlan = FoodBasePlan(name: "pooled insides", needs: [
         .scallop,
         .rumen,
         .insides,
@@ -37,7 +37,7 @@ class FoodBasePlan: Hashable, Identifiable {
         .fat,
     ])
     
-    static func onlyWeakBones(basedOn: FoodBasePlan) -> FoodBasePlan {
+    static func justSoftBones(basedOn: FoodBasePlan) -> FoodBasePlan {
         
         let needs: [Need] = basedOn.needs.map {
             
@@ -49,9 +49,9 @@ class FoodBasePlan: Hashable, Identifiable {
             }
             return $0
         }
-        return FoodBasePlan(name: "only weak bones with \(basedOn.name)", needs: needs)
+        return FoodBasePlan(name: "\(basedOn.name) soft bones", needs: needs)
     }
-    static let summarizedInsidesOnlyWeakBones: FoodBasePlan = onlyWeakBones(basedOn: FoodBasePlan.summarizedInsides)
+    static let summarizedInsidesOnlyWeakBones: FoodBasePlan = justSoftBones(basedOn: FoodBasePlan.summarizedInsides)
     
     static let separatedInsides: FoodBasePlan = FoodBasePlan(name: "insides", needs: [
         .scallop,
@@ -69,5 +69,5 @@ class FoodBasePlan: Hashable, Identifiable {
         .omega3Oil,
         .fat,
     ])
-    static let separatedInsidesOnlyWeakBones: FoodBasePlan = onlyWeakBones(basedOn: FoodBasePlan.separatedInsides)
+    static let separatedInsidesOnlyWeakBones: FoodBasePlan = justSoftBones(basedOn: FoodBasePlan.separatedInsides)
 }

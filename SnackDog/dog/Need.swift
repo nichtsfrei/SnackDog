@@ -24,12 +24,14 @@ extension EDog {
         if isNautered {
             result *= 0.9
         }
+        // TODO adapt maximun to 6% when not puppy or pregnant
         return result > 0.1 ? 0.1 : result
     }
     
     
     
     func algae_powder_per_day(jd: AlgaePowder) -> Measurement<UnitMass> {
+        // make it more abstract to be storeable in coredata later on
         let calendar = Calendar.current
         let months = calendar.dateComponents([.month], from: birthDate , to: Date()).month!
         var jodPercent: Double = {

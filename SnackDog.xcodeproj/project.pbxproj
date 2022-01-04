@@ -18,11 +18,17 @@
 		174F51652774DBC700FB76D5 /* dog.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 174F51632774DBC700FB76D5 /* dog.xcdatamodeld */; };
 		174F51682774DC6600FB76D5 /* DogEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174F51662774DC6600FB76D5 /* DogEditView.swift */; };
 		174F51692774DC6600FB76D5 /* FoodPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174F51672774DC6600FB76D5 /* FoodPlanView.swift */; };
+		1750CA8C2787789100BA262C /* Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1750CA8B2787789100BA262C /* Extenstions.swift */; };
+		1750CA8E27877FD900BA262C /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1750CA8D27877FD900BA262C /* Data.swift */; };
 		17522CCA277D063900FC33A3 /* DogSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17522CC9277D063900FC33A3 /* DogSize.swift */; };
 		17522CCC277D068600FC33A3 /* Need.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17522CCB277D068600FC33A3 /* Need.swift */; };
 		17522CCE277D070D00FC33A3 /* BasePlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17522CCD277D070D00FC33A3 /* BasePlan.swift */; };
 		1763D0142778F6F0002A35B8 /* Calculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1763D0132778F6F0002A35B8 /* Calculation.swift */; };
 		1763D0162778F752002A35B8 /* CalculationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1763D0152778F752002A35B8 /* CalculationTests.swift */; };
+		17821AF727838D3400D9F4D0 /* EmptyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17821AF627838D3400D9F4D0 /* EmptyState.swift */; };
+		17821AF9278390CA00D9F4D0 /* MassunitPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17821AF8278390CA00D9F4D0 /* MassunitPicker.swift */; };
+		17821AFB2784EFBB00D9F4D0 /* Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17821AFA2784EFBB00D9F4D0 /* Details.swift */; };
+		17821AFD278503C600D9F4D0 /* AlgaePowderEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17821AFC278503C600D9F4D0 /* AlgaePowderEdit.swift */; };
 		17D0B8D02775F38E008E20E3 /* DogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D0B8CF2775F38E008E20E3 /* DogsView.swift */; };
 		17D0B90D27766286008E20E3 /* AlgaePowderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D0B90C27766286008E20E3 /* AlgaePowderView.swift */; };
 /* End PBXBuildFile section */
@@ -59,11 +65,17 @@
 		174F51642774DBC700FB76D5 /* dog.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = dog.xcdatamodel; sourceTree = "<group>"; };
 		174F51662774DC6600FB76D5 /* DogEditView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DogEditView.swift; sourceTree = "<group>"; };
 		174F51672774DC6600FB76D5 /* FoodPlanView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodPlanView.swift; sourceTree = "<group>"; };
+		1750CA8B2787789100BA262C /* Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extenstions.swift; sourceTree = "<group>"; };
+		1750CA8D27877FD900BA262C /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		17522CC9277D063900FC33A3 /* DogSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogSize.swift; sourceTree = "<group>"; };
 		17522CCB277D068600FC33A3 /* Need.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Need.swift; sourceTree = "<group>"; };
 		17522CCD277D070D00FC33A3 /* BasePlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePlan.swift; sourceTree = "<group>"; };
 		1763D0132778F6F0002A35B8 /* Calculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calculation.swift; sourceTree = "<group>"; };
 		1763D0152778F752002A35B8 /* CalculationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculationTests.swift; sourceTree = "<group>"; };
+		17821AF627838D3400D9F4D0 /* EmptyState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyState.swift; sourceTree = "<group>"; };
+		17821AF8278390CA00D9F4D0 /* MassunitPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MassunitPicker.swift; sourceTree = "<group>"; };
+		17821AFA2784EFBB00D9F4D0 /* Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Details.swift; sourceTree = "<group>"; };
+		17821AFC278503C600D9F4D0 /* AlgaePowderEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlgaePowderEdit.swift; sourceTree = "<group>"; };
 		17D0B8CF2775F38E008E20E3 /* DogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogsView.swift; sourceTree = "<group>"; };
 		17D0B90C27766286008E20E3 /* AlgaePowderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlgaePowderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -116,16 +128,15 @@
 		174F51302774DAB400FB76D5 /* SnackDog */ = {
 			isa = PBXGroup;
 			children = (
-				174F51662774DC6600FB76D5 /* DogEditView.swift */,
-				174F51672774DC6600FB76D5 /* FoodPlanView.swift */,
-				1763D0132778F6F0002A35B8 /* Calculation.swift */,
-				17522CCD277D070D00FC33A3 /* BasePlan.swift */,
-				17522CCB277D068600FC33A3 /* Need.swift */,
-				17522CC9277D063900FC33A3 /* DogSize.swift */,
+				17821AF527836CBE00D9F4D0 /* dog */,
 				174F51312774DAB400FB76D5 /* SnackDogApp.swift */,
 				174F51332774DAB400FB76D5 /* ContentView.swift */,
-				17D0B8CF2775F38E008E20E3 /* DogsView.swift */,
 				17D0B90C27766286008E20E3 /* AlgaePowderView.swift */,
+				1750CA8D27877FD900BA262C /* Data.swift */,
+				17821AFC278503C600D9F4D0 /* AlgaePowderEdit.swift */,
+				17821AFA2784EFBB00D9F4D0 /* Details.swift */,
+				17821AF8278390CA00D9F4D0 /* MassunitPicker.swift */,
+				17821AF627838D3400D9F4D0 /* EmptyState.swift */,
 				174F51352774DAB500FB76D5 /* Assets.xcassets */,
 				174F513A2774DAB500FB76D5 /* Persistence.swift */,
 				174F51632774DBC700FB76D5 /* dog.xcdatamodeld */,
@@ -158,6 +169,21 @@
 				174F51532774DAB500FB76D5 /* SnackDogUITestsLaunchTests.swift */,
 			);
 			path = SnackDogUITests;
+			sourceTree = "<group>";
+		};
+		17821AF527836CBE00D9F4D0 /* dog */ = {
+			isa = PBXGroup;
+			children = (
+				17D0B8CF2775F38E008E20E3 /* DogsView.swift */,
+				1750CA8B2787789100BA262C /* Extenstions.swift */,
+				174F51662774DC6600FB76D5 /* DogEditView.swift */,
+				174F51672774DC6600FB76D5 /* FoodPlanView.swift */,
+				1763D0132778F6F0002A35B8 /* Calculation.swift */,
+				17522CCD277D070D00FC33A3 /* BasePlan.swift */,
+				17522CCB277D068600FC33A3 /* Need.swift */,
+				17522CC9277D063900FC33A3 /* DogSize.swift */,
+			);
+			path = dog;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -292,17 +318,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				174F51652774DBC700FB76D5 /* dog.xcdatamodeld in Sources */,
+				17821AFD278503C600D9F4D0 /* AlgaePowderEdit.swift in Sources */,
+				17821AF727838D3400D9F4D0 /* EmptyState.swift in Sources */,
+				17821AFB2784EFBB00D9F4D0 /* Details.swift in Sources */,
 				17522CCC277D068600FC33A3 /* Need.swift in Sources */,
 				17522CCA277D063900FC33A3 /* DogSize.swift in Sources */,
 				1763D0142778F6F0002A35B8 /* Calculation.swift in Sources */,
+				1750CA8E27877FD900BA262C /* Data.swift in Sources */,
 				17D0B90D27766286008E20E3 /* AlgaePowderView.swift in Sources */,
 				174F51682774DC6600FB76D5 /* DogEditView.swift in Sources */,
 				174F513B2774DAB500FB76D5 /* Persistence.swift in Sources */,
 				17522CCE277D070D00FC33A3 /* BasePlan.swift in Sources */,
 				174F51342774DAB400FB76D5 /* ContentView.swift in Sources */,
+				1750CA8C2787789100BA262C /* Extenstions.swift in Sources */,
 				174F51692774DC6600FB76D5 /* FoodPlanView.swift in Sources */,
 				17D0B8D02775F38E008E20E3 /* DogsView.swift in Sources */,
 				174F51322774DAB400FB76D5 /* SnackDogApp.swift in Sources */,
+				17821AF9278390CA00D9F4D0 /* MassunitPicker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

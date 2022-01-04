@@ -19,10 +19,9 @@ class DogSizeFactor {
     
     func factor(_ birthDate: Date) -> Double {
         let calendar = Calendar.current
-        let now = Date()
         for t in factor {
             if let compontent = t.0 {
-                let age = calendar.dateComponents([compontent], from: now).value(for: compontent)!
+                let age = calendar.dateComponents([compontent], from: birthDate, to: Date()).value(for: compontent)!
                 if age < t.1 {
                     return t.2
                 }

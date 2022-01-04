@@ -86,16 +86,17 @@ class Fetcher<T:NSManagedObject>: NSObject, ObservableObject, NSFetchedResultsCo
     @Published var data: [T] = []
     private let controller: NSFetchedResultsController<T>
     
+    let viewContext: NSManagedObjectContext
     
-    init(managedObjectContext: NSManagedObjectContext, basefetchRequest:NSFetchRequest<T>) {
+    init(context: NSManagedObjectContext, basefetchRequest:NSFetchRequest<T>) {
         let ft = basefetchRequest
         ft.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         controller = NSFetchedResultsController(fetchRequest: ft,
-                                                managedObjectContext: managedObjectContext,
+                                                managedObjectContext: context,
                                                 sectionNameKeyPath: nil, cacheName: nil)
+        self.viewContext = context
         super.init()
         controller.delegate = self
-        
         reload()
     }
     
@@ -115,18 +116,9 @@ class Fetcher<T:NSManagedObject>: NSObject, ObservableObject, NSFetchedResultsCo
         data = nJodData
     }
     
-}
-
-class Manipulator<T:NSManagedObject> {
-    let viewContext: NSManagedObjectContext
-    
-    init(context: NSManagedObjectContext) {
-        self.viewContext = context
-    }
-    
-    func remove(t: T) -> Bool {
+    func delete<A:NSManagedObject>(_ t: A) {
         viewContext.delete(t)
-        return save()
+        let _ = save()
     }
     
     func save() -> Bool {
@@ -139,43 +131,8 @@ class Manipulator<T:NSManagedObject> {
         }
     }
     
-    func withConext(f: (NSManagedObjectContext) -> T) -> T{
+    func withConext<A>(f: (NSManagedObjectContext) -> A) -> A{
         return f(viewContext)
-    }
-}
-
-class DogManipulator: Manipulator<Dog> {
-    
-    
-    
-    func toDog(dog: EDog) -> Dog {
-        let toSave = Dog(context: viewContext)
-        toSave.id = dog.id
-        toSave.name = dog.name
-        
-        toSave.weight = MeasurementData(context: viewContext)
-        toSave.weight?.id = dog.id
-        toSave.weight?.value = dog.weight.value
-        toSave.weight?.symbol = dog.weight.unit.symbol
-        
-        toSave.birthdate = dog.birthDate
-        toSave.typus = dog.size.rawValue
-        toSave.is_old = dog.isOld
-        toSave.is_nautered = dog.isNautered
-        toSave.activity_hours = dog.activityHours
-        return toSave
-    }
-    
-    
-    
-    
-    func put(dog: EDog) -> Dog? {
-        let d = toDog(dog: dog)
-        if save() {
-            return d
-        }
-        return nil
-        
     }
     
     
