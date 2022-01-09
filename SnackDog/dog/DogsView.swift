@@ -8,6 +8,7 @@ fileprivate struct SingleDogView: View {
     @State var dog: Dog
     @Binding var updated: Dog?
     @EnvironmentObject var jodFetcher: Fetcher<JodData>
+    @EnvironmentObject var foodPlanFetcher: Fetcher<FoodPlanData>
     
     
     var body: some View {
@@ -16,7 +17,7 @@ fileprivate struct SingleDogView: View {
         formatter.dateStyle = .long
         formatter.timeStyle = .none
         return NavigationLink(
-            destination: FoodPlanView(dog: dog.toEdog(), fetcher: jodFetcher)
+            destination: FoodPlanView(dog: dog.toEdog(), fetcher: jodFetcher, defaultFetcher: foodPlanFetcher)
         ) {
             GroupBox(label: HStack {
                 Text(name)
@@ -71,6 +72,7 @@ struct ProgramStartView: View {
     
     @EnvironmentObject var fetcher: Fetcher<Dog>
     @EnvironmentObject var jodFetcher: Fetcher<JodData>
+    @EnvironmentObject var foodPlanFetcher: Fetcher<FoodPlanData>
     
     
     var body: some View {
@@ -79,7 +81,7 @@ struct ProgramStartView: View {
                 let _ = fetcher.save(update, nil)
             }
         } else {
-            FoodPlanView(dog: fetcher.data.first!.toEdog(), fetcher: jodFetcher)
+            FoodPlanView(dog: fetcher.data.first!.toEdog(), fetcher: jodFetcher, defaultFetcher: foodPlanFetcher)
         }
     }
 }

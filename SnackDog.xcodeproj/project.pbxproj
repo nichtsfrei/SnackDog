@@ -67,6 +67,7 @@
 		174F51672774DC6600FB76D5 /* FoodPlanView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodPlanView.swift; sourceTree = "<group>"; };
 		1750CA8B2787789100BA262C /* Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extenstions.swift; sourceTree = "<group>"; };
 		1750CA8D27877FD900BA262C /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		1750CA8F2788AA1F00BA262C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		17522CC9277D063900FC33A3 /* DogSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogSize.swift; sourceTree = "<group>"; };
 		17522CCB277D068600FC33A3 /* Need.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Need.swift; sourceTree = "<group>"; };
 		17522CCD277D070D00FC33A3 /* BasePlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePlan.swift; sourceTree = "<group>"; };
@@ -128,6 +129,7 @@
 		174F51302774DAB400FB76D5 /* SnackDog */ = {
 			isa = PBXGroup;
 			children = (
+				1750CA8F2788AA1F00BA262C /* Info.plist */,
 				17821AF527836CBE00D9F4D0 /* dog */,
 				174F51312774DAB400FB76D5 /* SnackDogApp.swift */,
 				174F51332774DAB400FB76D5 /* ContentView.swift */,
@@ -501,7 +503,7 @@
 				DEVELOPMENT_TEAM = 3KHAA5YQG7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_FILE = SnackDog/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -535,7 +537,7 @@
 				DEVELOPMENT_TEAM = 3KHAA5YQG7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_FILE = SnackDog/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

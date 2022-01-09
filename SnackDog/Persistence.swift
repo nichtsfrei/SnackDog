@@ -88,9 +88,9 @@ class Fetcher<T:NSManagedObject>: NSObject, ObservableObject, NSFetchedResultsCo
     
     let viewContext: NSManagedObjectContext
     
-    init(context: NSManagedObjectContext, basefetchRequest:NSFetchRequest<T>) {
+    init(context: NSManagedObjectContext, basefetchRequest:NSFetchRequest<T>, sortKey: String = "name") {
         let ft = basefetchRequest
-        ft.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        ft.sortDescriptors = [NSSortDescriptor(key: sortKey, ascending: true)]
         controller = NSFetchedResultsController(fetchRequest: ft,
                                                 managedObjectContext: context,
                                                 sectionNameKeyPath: nil, cacheName: nil)

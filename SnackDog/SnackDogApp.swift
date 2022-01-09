@@ -22,6 +22,13 @@ struct SnackDogApp: App {
         context: PersistenceController.shared.container.viewContext,
         basefetchRequest: Dog.fetchRequest()
     )
+    
+    var foodPlanFetcher = Fetcher<FoodPlanData>(
+        context: PersistenceController.shared.container.viewContext,
+        basefetchRequest: FoodPlanData.fetchRequest(),
+        sortKey: "dog"
+    )
+    
     init() {
        
     }
@@ -32,6 +39,7 @@ struct SnackDogApp: App {
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environmentObject(algaeFetcher)
                 .environmentObject(dogFetcher)
+                .environmentObject(foodPlanFetcher)
         }
     }
 }

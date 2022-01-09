@@ -30,35 +30,7 @@ extension EDog {
     
     
     
-    func algae_powder_per_day(jd: AlgaePowder) -> Measurement<UnitMass> {
-        // make it more abstract to be storeable in coredata later on
-        let calendar = Calendar.current
-        let months = calendar.dateComponents([.month], from: birthDate , to: Date()).month!
-        var jodPercent: Double = {
-            switch months {
-            case _ where months < 4:
-                return 29.0
-            case _ where months < 7:
-                return 29.0 * 0.9
-            case _ where months < 10:
-                return 29.0 * 0.8
-            case _ where months < 12:
-                return 29.0 * 0.7
-            case _ where months < 14:
-                return 29.0 * 0.6
-            case _ where months < 16:
-                return 29.0 * 0.5
-            default:
-                return 12.7
-            }
-        }()
-        
-        jodPercent = jodPercent / Measurement(value: 1, unit: UnitMass.kilograms).converted(to: .micrograms).value
-        let jod_algae_percent = jd.jod.converted(to: .micrograms).value / jd.per.converted(to: .micrograms).value
-        var jod = weight.converted(to: .micrograms)
-        jod.value = jod.value * jodPercent / jod_algae_percent
-        return jod
-    }
+
     
 }
 

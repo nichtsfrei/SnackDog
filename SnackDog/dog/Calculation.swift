@@ -36,9 +36,41 @@ class FoodCalculation {
         self.portions = portions
     }
     
+    func jodPercentageForAge(birthDate: Date) -> Double {
+        let calendar = Calendar.current
+        let months = calendar.dateComponents([.month], from: birthDate , to: Date()).month!
+        let jodMicroGram: Double = {
+            switch months {
+            case _ where months < 4:
+                return 29.0
+            case _ where months < 7:
+                return 29.0 * 0.9
+            case _ where months < 10:
+                return 29.0 * 0.8
+            case _ where months < 12:
+                return 29.0 * 0.7
+            case _ where months < 14:
+                return 29.0 * 0.6
+            case _ where months < 16:
+                return 29.0 * 0.5
+            default:
+                return 12.7
+            }
+        }()
+        return jodMicroGram / Measurement(value: 1, unit: UnitMass.kilograms).converted(to: .micrograms).value
+    }
+    
+    func algae_powder_per_day(birthDate: Date, weight: Measurement<UnitMass>, jd: AlgaePowder) -> Measurement<UnitMass> {
+        let jod_algae_percent = jd.jod.converted(to: .micrograms).value / jd.per.converted(to: .micrograms).value
+        let jodPercent = jodPercentageForAge(birthDate: birthDate)
+        var jod = weight.converted(to: .micrograms)
+        jod.value = jod.value * jodPercent / jod_algae_percent
+        return jod
+    }
+    
     func need(_ fpd: Double, _ i: Need) -> Measurement<UnitMass> {
         if i.automatic && i.id == Need.algaePowder.id {
-            return dog.algae_powder_per_day(jd: jd).converted(to: .micrograms)
+            return algae_powder_per_day(birthDate: dog.birthDate, weight: dog.weight, jd: jd).converted(to: .micrograms)
         }
         if i.basedOn == 0 {
             return Measurement(value: fpd * i.category.percentage * i.percentage, unit: .micrograms)
@@ -80,7 +112,8 @@ class FoodCalculation {
             for day in cd {
                 let toAppend = result[day]
                 for portion in cp {
-                    var pToAppend = toAppend[portion]
+                    let pIndex = portion < toAppend.endIndex ? portion : toAppend.endIndex - 1
+                    var pToAppend = toAppend[pIndex]
                     var perPortion = perDay
                     
                     perPortion.value = perPortion.value * Double(days / cd.count)
@@ -94,7 +127,7 @@ class FoodCalculation {
                         pToAppend?.recommendation.append(recommendation)
                     }
                     
-                    result[day][portion] = pToAppend
+                    result[day][pIndex] = pToAppend
                 }
             }
             

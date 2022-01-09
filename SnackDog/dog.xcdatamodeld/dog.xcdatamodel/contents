@@ -18,6 +18,17 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
+    <entity name="FoodPlanData" representedClassName="FoodPlanData" syncable="YES" codeGenerationType="class">
+        <attribute name="basePlan" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="dog" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="jodData" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="portions" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="dog"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
     <entity name="JodData" representedClassName="JodData" syncable="YES" codeGenerationType="class">
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
@@ -47,7 +58,8 @@
     </entity>
     <elements>
         <element name="Dog" positionX="-63" positionY="-18" width="128" height="149"/>
-        <element name="JodData" positionX="-54" positionY="90" width="128" height="89"/>
-        <element name="MeasurementData" positionX="-63" positionY="81" width="128" height="119"/>
+        <element name="JodData" positionX="1674.609375" positionY="-2.66796875" width="128" height="89"/>
+        <element name="MeasurementData" positionX="769.79296875" positionY="-219.94140625" width="128" height="133"/>
+        <element name="FoodPlanData" positionX="135" positionY="-63" width="128" height="89"/>
     </elements>
 </model>

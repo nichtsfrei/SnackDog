@@ -42,6 +42,7 @@ fileprivate struct RecommendationView: Identifiable, View {
 struct FoodPlanView: View {
     
     @State var fetcher: Fetcher<JodData>
+    @State var defaultFetcher: Fetcher<FoodPlanData>
     
     let basePlans: [FoodBasePlan] = [
         .summarizedInsides,
@@ -52,14 +53,33 @@ struct FoodPlanView: View {
     let weekdays = (DateFormatter().weekdaySymbols ?? []) + [ "Weekly" ]
     
     let dog: EDog
-    @State var plan: FoodBasePlan = .summarizedInsides
+    @State var plan: FoodBasePlan
+    
+    @State var portions: Int
     
     @State var jod: AlgaePowder?
     
-    init(dog: EDog, fetcher: Fetcher<JodData>) {
+    
+    
+    init(dog: EDog, fetcher: Fetcher<JodData>, defaultFetcher: Fetcher<FoodPlanData>) {
         self.dog = dog
-        self._jod = State(wrappedValue: AlgaePowder.from(jodData: fetcher.data.first))
+        let defaults = defaultFetcher.data.first{
+            if let dID = $0.dog {
+                return dID == dog.id
+            }
+            return false
+        }
+        let startingJodData = fetcher.data.first{
+            return $0.id == defaults?.jodData
+        } ?? fetcher.data.first
+        let baseplan = basePlans.first{
+            return $0.id == defaults?.basePlan
+        } ?? .summarizedInsides
+        self._jod = State(wrappedValue: AlgaePowder.from(jodData: startingJodData))
         self._fetcher = State(wrappedValue: fetcher)
+        self._portions = State(wrappedValue: Int(defaults?.portions ?? 2))
+        self._defaultFetcher = State(wrappedValue: defaultFetcher)
+        self._plan = State(wrappedValue: baseplan)
     }
     
     
@@ -119,13 +139,28 @@ struct FoodPlanView: View {
         Text(")")
     }
     
+    func saveDefaults() {
+        let _ : FoodPlanData = defaultFetcher.withConext{ vc in
+            let fpd = FoodPlanData(context: vc)
+            fpd.dog = dog.id
+            fpd.basePlan = plan.id
+            fpd.portions = Int16(portions)
+            fpd.jodData = jod?.id
+            return fpd
+        }
+        if !defaultFetcher.save() {
+            print("failed to save defaults")
+        }
+    }
+    
     var body: some View {
         // For now add a weekly overview in the list
         let jd = jod ?? AlgaePowder.from(jodData: nil)
         let fp = FoodCalculation(
             dog: dog,
             jd: jd,
-            plan: plan).calculate()
+            plan: plan,
+            portions: portions).calculate()
         
         return VStack(alignment: .leading){
             HStack {
@@ -157,7 +192,17 @@ struct FoodPlanView: View {
         
         .navigationTitle("\(dog.name)")
         .tabViewStyle(.page)
-        .indexViewStyle(.page(backgroundDisplayMode: .always))
+        .indexViewStyle(.page(backgroundDisplayMode: .interactive))
+        .onChange(of: portions) { _ in
+            saveDefaults()
+        }
+        .onChange(of: jod) { _ in
+            saveDefaults()
+        }
+        .onChange(of: plan) { _ in
+            saveDefaults()
+        }
+        
         .toolbar{
             HStack {
                 Menu{
@@ -171,6 +216,13 @@ struct FoodPlanView: View {
                             }
                         }.pickerStyle(.automatic)
                     }
+                    Menu("Portions") {
+                        Picker("Portions", selection: $portions) {
+                            ForEach(1..<5) {
+                                Text("\($0)").tag($0)
+                            }
+                        }
+                    }
                     Menu("Plan") {
                         Picker("Plan", selection: $plan) {
                             ForEach(basePlans) {
@@ -182,8 +234,6 @@ struct FoodPlanView: View {
                 } label: {
                     Image(systemName: "gear")
                 }
-                
-                
                 Button(action: {
                     pageIndex = Calendar.current.component(.weekday, from: Date()) - 1
                 }){
