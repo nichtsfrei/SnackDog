@@ -2,20 +2,22 @@ import SwiftUI
 
 fileprivate struct RecommendationView: Identifiable, View {
     var id: Int
-    var title: String
+    var title: LocalizedStringKey
+    var symbol: String
     var values: Array<Recommendation<UnitMass>>
     var total: Measurement<UnitMass>?
     
-    init (id: Int, title: String, values: Array<Recommendation<UnitMass>>, total: Measurement<UnitMass>) {
+    init (id: Int, title: String, symbol: String, values: Array<Recommendation<UnitMass>>, total: Measurement<UnitMass>) {
         self.id = id
-        self.title = title
+        self.title = LocalizedStringKey(title)
         self.values = values
         self.total = total
+        self.symbol = symbol
     }
     
     var body: some View {
         let label = HStack{
-            Text(title)
+            Text(symbol) + Text(title)
             Spacer()
             if let t = total {
                 Text(t.formatted(.measurement(width: .abbreviated)))
@@ -26,7 +28,7 @@ fileprivate struct RecommendationView: Identifiable, View {
             VStack(alignment: .leading, spacing: 1.0) {
                 ForEach(values) { v in
                     HStack {
-                        Text("\(v.name)")
+                        Text(LocalizedStringKey(v.name))
                         Spacer()
                         Text(v.value.formatted(.measurement(width: .abbreviated)))
                         
@@ -101,6 +103,7 @@ struct FoodPlanView: View {
                 RecommendationView(
                     id: c.value.first?.index ?? c.key.hash,
                     title: c.key,
+                    symbol: c.value.first?.symbol ?? "",
                     values: c.value,
                     total: c.value.reduce(init_m(), total_rec))
             }.sorted{ a, b in
@@ -164,9 +167,15 @@ struct FoodPlanView: View {
         
         return VStack(alignment: .leading){
             HStack {
-                Text("Plan: \(plan.name)").padding(.leading).foregroundColor(.secondary).font(.footnote)
+                (Text("Plan: ") + Text(LocalizedStringKey(plan.name)))
+                    .truncationMode(.middle)
+                    .lineLimit(1)
+                    .padding(.leading).foregroundColor(.secondary).font(.footnote)
                 Spacer()
-                Text("Algae Powder: \(jd.name)").padding(.leading).foregroundColor(.secondary).font(.footnote)
+                Text("Algae Powder: \(jd.name)")
+                    .truncationMode(.middle)
+                    .lineLimit(1)
+                    .padding(.leading).foregroundColor(.secondary).font(.footnote)
             }
 
             TabView(selection: $pageIndex) {
@@ -226,7 +235,7 @@ struct FoodPlanView: View {
                     Menu("Plan") {
                         Picker("Plan", selection: $plan) {
                             ForEach(basePlans) {
-                                Text($0.name).tag($0)
+                                Text(LocalizedStringKey($0.name)).tag($0)
                             }
                         }
                     }

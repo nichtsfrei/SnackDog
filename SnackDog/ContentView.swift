@@ -9,6 +9,7 @@ struct Sidebar: View {
             NavigationLink(
                 destination: DogsView()
             ) {
+                
                 Text("Dogs")
                 
             }

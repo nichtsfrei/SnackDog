@@ -37,13 +37,14 @@ extension EDog {
 struct Category: Identifiable, Hashable {
     let id: Int
     let name: String
+    let symbol: String
     let percentage: Double // Of food
     
     
     
-    static let animal = Category(id: 0, name: "🥩 Animal", percentage: 0.8)
-    static let herbal = Category(id: 1, name: "🥗 Herbal", percentage: 0.2)
-    static let supplement = Category(id: 2, name: "💊 Supplements", percentage: 0)
+    static let animal = Category(id: 0, name: "Animal", symbol: "🥩", percentage: 0.8)
+    static let herbal = Category(id: 1, name: "Herbal", symbol: "🥗", percentage: 0.2)
+    static let supplement = Category(id: 2, name: "Supplements", symbol: "💊", percentage: 0)
     
 }
 

@@ -3,6 +3,7 @@ import Foundation
 struct Recommendation <T: Unit>: Identifiable{
     var id: UUID = UUID()
     var name: String
+    var symbol: String
     var category: String
     var index: Int
     var value: Measurement<T>
@@ -85,7 +86,7 @@ class FoodCalculation {
         let recommendations: [Recommendation<UnitMass>] = plan.needs.map{
             var amount = need(fpd, $0)
             amount.value *= Double(days)
-            return Recommendation(name: $0.name, category: $0.category.name, index: $0.category.id, value: amount)
+            return Recommendation(name: $0.name, symbol: $0.category.symbol, category: $0.category.name, index: $0.category.id, value: amount)
         }
         
         return Portion(recommendation: recommendations, index: 0)
@@ -120,7 +121,7 @@ class FoodCalculation {
                     if cp.count == portions {
                         perPortion.value = perPortion.value / Double(portions)
                     }
-                    let recommendation = Recommendation(name: i.name, category: i.category.name, index: i.category.id, value: perPortion)
+                    let recommendation = Recommendation(name: i.name, symbol: i.category.symbol, category: i.category.name, index: i.category.id, value: perPortion)
                     if pToAppend == nil {
                         pToAppend = Portion(recommendation: [recommendation], index: portion)
                     } else {
