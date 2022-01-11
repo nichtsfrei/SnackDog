@@ -52,7 +52,7 @@ struct FoodPlanView: View {
         .separatedInsides,
         .separatedInsidesOnlyWeakBones
     ]
-    let weekdays = (DateFormatter().weekdaySymbols ?? []) + [ "Weekly" ]
+    let weekdays = Locale.current.calendar.weekdaySymbols
     
     let dog: EDog
     @State var plan: FoodBasePlan
@@ -61,7 +61,9 @@ struct FoodPlanView: View {
     
     @State var jod: AlgaePowder
     
+    @State var showWeekly: Bool = false
     let defaults: FoodPlanData?
+    let todaysIndex = Calendar.current.component(.weekday, from: Date()) - 1
     
     
     
@@ -114,12 +116,9 @@ struct FoodPlanView: View {
                 
             }
         }
-        return VStack(alignment: .leading){
-            
-            ForEach(views()) {
+        return ForEach(views()) {
                 $0
             }
-        }
         
     }
     
@@ -150,9 +149,7 @@ struct FoodPlanView: View {
             return result
         }
         return defaultFetcher.withConext{
-            let result = FoodPlanData(context: $0)
-            
-            return result
+            return  FoodPlanData(context: $0)
         }
     }
     
@@ -191,18 +188,19 @@ struct FoodPlanView: View {
             TabView(selection: $pageIndex) {
                 ForEach(weekdays.indices){ index in
                     VStack(alignment: .leading) {
-                        Text(weekdays[index]).padding(.leading).font(.title2)
+                        Text(weekdays[index])
+                            .padding(.leading)
+                            .font(.title2)
+                            .foregroundColor(todaysIndex == index ? .primary : .secondary)
                         ScrollView {
-                            if index != weekdays.count - 1 {
-                                let filtered: [Portion] = fp.days[index].filter { d in
-                                    return d != nil
-                                }.map{ d in
-                                    return d!
-                                }
-                                recomendationDayView(day: filtered)
-                            } else {
-                                portionView(p: fp.weekly)
+                            
+                            let filtered: [Portion] = fp.days[index].filter { d in
+                                return d != nil
+                            }.map{ d in
+                                return d!
                             }
+                            recomendationDayView(day: filtered)
+                            
                         }
                     }.tag(index)
                 }
@@ -221,9 +219,21 @@ struct FoodPlanView: View {
         .onChange(of: plan) { _ in
             saveDefaults()
         }
-        
+        .sheet(isPresented: $showWeekly) {
+                VStack {
+                    Text("Weekly").font(.title2).padding()
+                    portionView(p: fp.weekly)
+                    Spacer()
+                }
+            
+        }
         .toolbar{
             HStack {
+                Button(action: {
+                    showWeekly = true
+                }){
+                    Image(systemName: "list.bullet")
+                }
                 Menu{
                     if !fetcher.data.isEmpty {
                         Menu("Algae Powder") {
@@ -253,16 +263,8 @@ struct FoodPlanView: View {
                 } label: {
                     Image(systemName: "gear")
                 }
-                Button(action: {
-                    pageIndex = Calendar.current.component(.weekday, from: Date()) - 1
-                }){
-                    Image(systemName: "calendar")
-                }
-                Button(action: {
-                    pageIndex = weekdays.count - 1
-                }){
-                    Image(systemName: "list.bullet")
-                }
+                
+                
             }
         }
         

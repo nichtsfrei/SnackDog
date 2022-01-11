@@ -10,7 +10,6 @@ fileprivate struct SingleDogView: View {
     @EnvironmentObject var jodFetcher: Fetcher<JodData>
     @EnvironmentObject var foodPlanFetcher: Fetcher<FoodPlanData>
     
-    
     var body: some View {
         let formatter = DateFormatter()
         let name = dog.name ?? "Unknown"

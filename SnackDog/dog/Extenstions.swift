@@ -44,6 +44,7 @@ extension MeasurementData {
 
 extension Dog {
     func toEdog() -> EDog {
+        
         let dog = self
         
         return EDog(
