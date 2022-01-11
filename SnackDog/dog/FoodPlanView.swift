@@ -59,7 +59,9 @@ struct FoodPlanView: View {
     
     @State var portions: Int
     
-    @State var jod: AlgaePowder?
+    @State var jod: AlgaePowder
+    
+    let defaults: FoodPlanData?
     
     
     
@@ -82,6 +84,7 @@ struct FoodPlanView: View {
         self._portions = State(wrappedValue: Int(defaults?.portions ?? 2))
         self._defaultFetcher = State(wrappedValue: defaultFetcher)
         self._plan = State(wrappedValue: baseplan)
+        self.defaults = defaults
     }
     
     
@@ -142,26 +145,33 @@ struct FoodPlanView: View {
         Text(")")
     }
     
-    func saveDefaults() {
-        let _ : FoodPlanData = defaultFetcher.withConext{ vc in
-            let fpd = FoodPlanData(context: vc)
-            fpd.dog = dog.id
-            fpd.basePlan = plan.id
-            fpd.portions = Int16(portions)
-            fpd.jodData = jod?.id
-            return fpd
+    private func getOrCreate(_ d: FoodPlanData?) -> FoodPlanData {
+        if let result = d {
+            return result
         }
-        if !defaultFetcher.save() {
-            print("failed to save defaults")
+        return defaultFetcher.withConext{
+            let result = FoodPlanData(context: $0)
+            
+            return result
         }
     }
     
+    func saveDefaults() {
+        let fpd = getOrCreate(defaults)
+        
+        fpd.dog = dog.id
+        fpd.basePlan = plan.id
+        fpd.portions = Int16(portions)
+        fpd.jodData = jod.id
+        
+        defaultFetcher.save()
+    }
+    
     var body: some View {
-        // For now add a weekly overview in the list
-        let jd = jod ?? AlgaePowder.from(jodData: nil)
+        
         let fp = FoodCalculation(
             dog: dog,
-            jd: jd,
+            jd: jod,
             plan: plan,
             portions: portions).calculate()
         
@@ -172,12 +182,12 @@ struct FoodPlanView: View {
                     .lineLimit(1)
                     .padding(.leading).foregroundColor(.secondary).font(.footnote)
                 Spacer()
-                Text("Algae Powder: \(jd.name)")
+                Text("Algae Powder: \(jod.name)")
                     .truncationMode(.middle)
                     .lineLimit(1)
                     .padding(.leading).foregroundColor(.secondary).font(.footnote)
             }
-
+            
             TabView(selection: $pageIndex) {
                 ForEach(weekdays.indices){ index in
                     VStack(alignment: .leading) {

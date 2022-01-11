@@ -51,10 +51,10 @@ struct PersistenceController {
         return result
     }()
     
-    let container: NSPersistentContainer
+    let container: NSPersistentCloudKitContainer
     
     init(inMemory: Bool = false) {
-        container = NSPersistentContainer(name: "dog")
+        container = NSPersistentCloudKitContainer(name: "dog")
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
         }
@@ -84,6 +84,9 @@ struct PersistenceController {
 
 class Fetcher<T:NSManagedObject>: NSObject, ObservableObject, NSFetchedResultsControllerDelegate {
     @Published var data: [T] = []
+    @Published var selected: T? = nil
+    @Published var updated: Bool = false
+    
     private let controller: NSFetchedResultsController<T>
     
     let viewContext: NSManagedObjectContext
@@ -116,18 +119,29 @@ class Fetcher<T:NSManagedObject>: NSObject, ObservableObject, NSFetchedResultsCo
         data = nJodData
     }
     
+    
+    func measurementData(md: MeasurementData?) -> MeasurementData {
+        if let med = md {
+            return med
+        }
+        return self.withConext{ context in
+            let result = MeasurementData(context: context)
+            result.id = UUID()
+            return result
+        }
+        
+    }
+    
     func delete<A:NSManagedObject>(_ t: A) {
         viewContext.delete(t)
         let _ = save()
     }
     
-    func save() -> Bool {
+    func save() {
         do {
             try viewContext.save()
-            return true
         } catch {
             print("ignoring error while saving: \(error)")
-            return false
         }
     }
     

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		171C5023278B659C006D9EEB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 171C5021278B659C006D9EEB /* Localizable.strings */; };
+		171C5028278B80CF006D9EEB /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 171C5027278B80CF006D9EEB /* CloudKit.framework */; };
 		174F51322774DAB400FB76D5 /* SnackDogApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174F51312774DAB400FB76D5 /* SnackDogApp.swift */; };
 		174F51342774DAB400FB76D5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174F51332774DAB400FB76D5 /* ContentView.swift */; };
 		174F51362774DAB500FB76D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 174F51352774DAB500FB76D5 /* Assets.xcassets */; };
@@ -54,6 +55,8 @@
 /* Begin PBXFileReference section */
 		171C5022278B659C006D9EEB /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		171C5024278B762C006D9EEB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		171C5025278B80C8006D9EEB /* SnackDog.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SnackDog.entitlements; sourceTree = "<group>"; };
+		171C5027278B80CF006D9EEB /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		174F512E2774DAB400FB76D5 /* SnackDog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SnackDog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		174F51312774DAB400FB76D5 /* SnackDogApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackDogApp.swift; sourceTree = "<group>"; };
 		174F51332774DAB400FB76D5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -89,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				171C5028278B80CF006D9EEB /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,6 +113,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		171C5026278B80CF006D9EEB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				171C5027278B80CF006D9EEB /* CloudKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		174F51252774DAB400FB76D5 = {
 			isa = PBXGroup;
 			children = (
@@ -116,6 +128,7 @@
 				174F51462774DAB500FB76D5 /* SnackDogTests */,
 				174F51502774DAB500FB76D5 /* SnackDogUITests */,
 				174F512F2774DAB400FB76D5 /* Products */,
+				171C5026278B80CF006D9EEB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -132,6 +145,7 @@
 		174F51302774DAB400FB76D5 /* SnackDog */ = {
 			isa = PBXGroup;
 			children = (
+				171C5025278B80C8006D9EEB /* SnackDog.entitlements */,
 				1750CA8F2788AA1F00BA262C /* Info.plist */,
 				171C5021278B659C006D9EEB /* Localizable.strings */,
 				17821AF527836CBE00D9F4D0 /* dog */,
@@ -516,6 +530,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = SnackDog/SnackDog.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -550,6 +565,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = SnackDog/SnackDog.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

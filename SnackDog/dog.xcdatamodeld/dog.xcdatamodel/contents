@@ -3,63 +3,37 @@
     <entity name="Dog" representedClassName="Dog" syncable="YES" codeGenerationType="class">
         <attribute name="activity_hours" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="birthdate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="is_nautered" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="is_old" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="typus" optional="YES" attributeType="String"/>
         <relationship name="weight" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MeasurementData" inverseName="weight" inverseEntity="MeasurementData"/>
-        <uniquenessConstraints>
-            <uniquenessConstraint>
-                <constraint value="name"/>
-            </uniquenessConstraint>
-            <uniquenessConstraint>
-                <constraint value="id"/>
-            </uniquenessConstraint>
-        </uniquenessConstraints>
     </entity>
     <entity name="FoodPlanData" representedClassName="FoodPlanData" syncable="YES" codeGenerationType="class">
         <attribute name="basePlan" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="dog" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="jodData" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="portions" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <uniquenessConstraints>
-            <uniquenessConstraint>
-                <constraint value="dog"/>
-            </uniquenessConstraint>
-        </uniquenessConstraints>
     </entity>
     <entity name="JodData" representedClassName="JodData" syncable="YES" codeGenerationType="class">
-        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="per" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MeasurementData" inverseName="jodPer" inverseEntity="MeasurementData"/>
         <relationship name="value" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MeasurementData" inverseName="jod" inverseEntity="MeasurementData"/>
-        <uniquenessConstraints>
-            <uniquenessConstraint>
-                <constraint value="name"/>
-            </uniquenessConstraint>
-            <uniquenessConstraint>
-                <constraint value="id"/>
-            </uniquenessConstraint>
-        </uniquenessConstraints>
     </entity>
     <entity name="MeasurementData" representedClassName="MeasurementData" syncable="YES" codeGenerationType="class">
-        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="symbol" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="symbol" attributeType="String" defaultValueString="&quot;&quot;"/>
         <attribute name="value" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="jod" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="JodData" inverseName="value" inverseEntity="JodData"/>
         <relationship name="jodPer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="JodData" inverseName="per" inverseEntity="JodData"/>
         <relationship name="weight" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Dog" inverseName="weight" inverseEntity="Dog"/>
-        <uniquenessConstraints>
-            <uniquenessConstraint>
-                <constraint value="id"/>
-            </uniquenessConstraint>
-        </uniquenessConstraints>
     </entity>
     <elements>
         <element name="Dog" positionX="-63" positionY="-18" width="128" height="149"/>
-        <element name="JodData" positionX="1674.609375" positionY="-2.66796875" width="128" height="89"/>
-        <element name="MeasurementData" positionX="769.79296875" positionY="-219.94140625" width="128" height="133"/>
         <element name="FoodPlanData" positionX="135" positionY="-63" width="128" height="89"/>
+        <element name="JodData" positionX="1674.609375" positionY="-2.66796875" width="128" height="89"/>
+        <element name="MeasurementData" positionX="769.79296875" positionY="-219.94140625" width="128" height="119"/>
     </elements>
 </model>

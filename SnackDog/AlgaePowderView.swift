@@ -2,30 +2,31 @@ import SwiftUI
 
 fileprivate extension Fetcher {
     
-    func measurementData(md: MeasurementData?) -> MeasurementData {
-        return self.withConext{ context in
-            let result = MeasurementData(context: context)
-            result.id = md?.id ?? UUID()
+ 
+    func getOrCreate(_ jd: JodData?) -> JodData {
+        if let result = jd {
             return result
         }
-        
+        return self.withConext {
+            let result = JodData(context: $0)
+            return result
+        }
     }
     
-    func save(_ changedData: AlgaePowder, _ basedOn: JodData?) -> JodData {
-        let result: JodData = self.withConext{ context in
-            let jodData = JodData(context: context)
-            jodData.id = changedData.id
-            jodData.name = changedData.name
-            jodData.value = measurementData(md: basedOn?.value)
-            jodData.value?.value = changedData.jod.value
-            jodData.value?.symbol = changedData.jod.unit.symbol
-            jodData.per = measurementData(md: basedOn?.per)
-            jodData.per?.value = changedData.per.value
-            jodData.per?.symbol = changedData.per.unit.symbol
-            return jodData
-        }
-        let _ = self.save()
-        return result
+    func save(_ changedData: AlgaePowder, _ basedOn: JodData?) {
+        let jodData = getOrCreate(basedOn)
+        jodData.id = changedData.id
+        jodData.name = changedData.name
+        jodData.value = measurementData(md: basedOn?.value)
+        jodData.value?.value = changedData.jod.value
+        jodData.value?.symbol = changedData.jod.unit.symbol
+        jodData.per = measurementData(md: basedOn?.per)
+        jodData.per?.value = changedData.per.value
+        jodData.per?.symbol = changedData.per.unit.symbol
+        
+        self.save()
+        self.selected = nil
+        self.updated.toggle()
     }
 }
 
@@ -36,7 +37,7 @@ struct AlgaePowderView: View {
         @EnvironmentObject var fetcher: Fetcher<JodData>
         let data: JodData
         
-        @Binding var updated: JodData?
+        @Binding var updated: Bool
         
         var body: some View {
             let jm = data.value?.measurement() ?? Measurement(value: 0, unit: .milligrams)
@@ -44,7 +45,7 @@ struct AlgaePowderView: View {
             return VStack {
                 HStack {
                     NavigationLink(destination: EditView(jod: data) { changedData in
-                        updated = fetcher.save(changedData, data)
+                        fetcher.save(changedData, data)
                     }){
                         Text(data.name ?? "").font(.title2)
                     }
@@ -64,17 +65,12 @@ struct AlgaePowderView: View {
     
     @EnvironmentObject var fetcher: Fetcher<JodData>
     
-    // will be set to trigger a refresh of the list view
-    @State var updated: JodData? = nil
-    // Selected for details dialog
-    @State var details: JodData? = nil
-    
     var body: some View {
         return List{
             ForEach(fetcher.data) { jod in
-                SingleView(data: jod, updated: $updated)
+                SingleView(data: jod, updated: $fetcher.updated)
                     .detailsDeleteSwipeable(
-                        onDetails: { details = jod },
+                        onDetails: { fetcher.selected = jod },
                         onDelete: { fetcher.delete(jod)}
                     )
             }
@@ -84,9 +80,9 @@ struct AlgaePowderView: View {
                 .font(.title3)
                 .foregroundColor(Color.secondary)
         }
-        .sheet(item: $details) { data in
+        .sheet(item: $fetcher.selected) { data in
             EditDialog(jod: data){ changedData in
-                updated = fetcher.save(changedData, data)
+                fetcher.save(changedData, data)
             }
         }
         .listStyle(.plain)
@@ -94,7 +90,7 @@ struct AlgaePowderView: View {
             NavigationLink(
                 destination:
                     EditView(jod: nil) { changedData in
-                        updated = fetcher.save(changedData, nil)
+                        fetcher.save(changedData, nil)
                     }.navigationTitle("New")) {
                         Image(systemName: "plus.app")
                     }.keyboardShortcut(.defaultAction)
