@@ -4,10 +4,10 @@ fileprivate struct RecommendationView: Identifiable, View {
     var id: Int
     var title: LocalizedStringKey
     var symbol: String
-    var values: Array<Recommendation<UnitMass>>
-    var total: Measurement<UnitMass>?
+    var values: Array<Recommendation<Dimension>>
+    var total: Measurement<Dimension>?
     
-    init (id: Int, title: String, symbol: String, values: Array<Recommendation<UnitMass>>, total: Measurement<UnitMass>) {
+    init (id: Int, title: String, symbol: String, values: Array<Recommendation<Dimension>>, total: Measurement<Dimension>) {
         self.id = id
         self.title = LocalizedStringKey(title)
         self.values = values
@@ -15,12 +15,25 @@ fileprivate struct RecommendationView: Identifiable, View {
         self.symbol = symbol
     }
     
+    // TODO remove and use $0.formatted(.measurement(width: .abbreviated))
+    private func measurementFormat(_ toFormat: Measurement<Dimension>) -> String {
+        //return toFormat.formatted(.measurement(width: .abbreviated))
+        if let mu = toFormat.unit as? UnitMass {
+            let result: Measurement<UnitMass> = Measurement(value: toFormat.value, unit: mu)
+            return result.formatted(.measurement(width: .abbreviated))
+        } else if let vu = toFormat.unit as? UnitVolume {
+            let result: Measurement<UnitVolume> = Measurement(value: toFormat.value, unit: vu)
+            return result.formatted(.measurement(width: .abbreviated))
+        }
+        return toFormat.formatted(.measurement(width: .abbreviated))
+    }
+    
     var body: some View {
         let label = HStack{
             Text(symbol) + Text(title)
             Spacer()
             if let t = total {
-                Text(t.formatted(.measurement(width: .abbreviated)))
+                Text(measurementFormat(t))
             }
         }
         
@@ -43,29 +56,21 @@ fileprivate struct RecommendationView: Identifiable, View {
 
 struct FoodPlanView: View {
     
-    @State var fetcher: Fetcher<JodData>
-    @State var defaultFetcher: Fetcher<FoodPlanData>
     
-    let basePlans: [FoodBasePlan] = [
-        .summarizedInsides,
-        .summarizedInsidesOnlyWeakBones,
-        .separatedInsides,
-        .separatedInsidesOnlyWeakBones
-    ]
+    
     let weekdays = Locale.current.calendar.weekdaySymbols
-    
-    let dog: EDog
-    @State var plan: FoodBasePlan
-    
-    @State var portions: Int
-    
-    @State var jod: AlgaePowder
-    
-    @State var showWeekly: Bool = false
-    let defaults: FoodPlanData?
     let todaysIndex = Calendar.current.component(.weekday, from: Date()) - 1
     
+    @State var showWeekly: Bool = false
     
+    @State var plan: FoodBasePlan
+    @State var portions: Int
+    @State var jod: AlgaePowder
+    @State var jodFetcher: Fetcher<JodData>
+    @State var defaultFetcher: Fetcher<FoodPlanData>
+    
+    let dog: EDog
+    let defaults: FoodPlanData?
     
     init(dog: EDog, fetcher: Fetcher<JodData>, defaultFetcher: Fetcher<FoodPlanData>) {
         self.dog = dog
@@ -78,24 +83,25 @@ struct FoodPlanView: View {
         let startingJodData = fetcher.data.first{
             return $0.id == defaults?.jodData
         } ?? fetcher.data.first
-        let baseplan = basePlans.first{
+        let baseplan = FoodBasePlan.predefined.first{
             return $0.id == defaults?.basePlan
         } ?? .summarizedInsides
         self._jod = State(wrappedValue: AlgaePowder.from(jodData: startingJodData))
-        self._fetcher = State(wrappedValue: fetcher)
+        self._jodFetcher = State(wrappedValue: fetcher)
         self._portions = State(wrappedValue: Int(defaults?.portions ?? 2))
         self._defaultFetcher = State(wrappedValue: defaultFetcher)
         self._plan = State(wrappedValue: baseplan)
         self.defaults = defaults
     }
     
-    
-    
-    private let total_rec = {(x: Measurement<UnitMass>, y: Recommendation<UnitMass>) -> Measurement<UnitMass> in
-        let m: Measurement<UnitMass> = y.value.converted(to: x.unit)
+    private let total_rec = {(x: Measurement<Dimension>, y: Recommendation<Dimension>) -> Measurement<Dimension> in
+        let m: Measurement<Dimension> = y.value.converted(to: x.unit)
         return Measurement(value: x.value + m.value, unit: x.unit)
     }
-    let init_m = {Measurement(value: 0.0, unit: UnitMass.micrograms)}
+    let init_m = {
+        return Measurement(value: 0.0, unit: UnitMass.micrograms) as Measurement<Dimension>
+       
+    }
     
     private func portionView(p: Portion) -> some View {
         let views = { () -> [RecommendationView] in
@@ -119,12 +125,9 @@ struct FoodPlanView: View {
         return ForEach(views()) {
                 $0
             }
-        
     }
     
     private func recomendationDayView(day: Array<Portion>) -> some View {
-        
-        
         return ForEach(day) { p in
             GroupBox("\(p.index + 1). Portion"){
                 portionView(p: p)
@@ -235,11 +238,10 @@ struct FoodPlanView: View {
                     Image(systemName: "list.bullet")
                 }
                 Menu{
-                    if !fetcher.data.isEmpty {
+                    if !jodFetcher.data.isEmpty {
                         Menu("Algae Powder") {
-                            
                             Picker("Algae Powder", selection: $jod) {
-                                ForEach(fetcher.data) {
+                                ForEach(jodFetcher.data) {
                                     jodText(jod: AlgaePowder.from(jodData: $0)).tag(AlgaePowder.from(jodData: $0) as AlgaePowder?)
                                 }
                             }
@@ -254,7 +256,7 @@ struct FoodPlanView: View {
                     }
                     Menu("Plan") {
                         Picker("Plan", selection: $plan) {
-                            ForEach(basePlans) {
+                            ForEach(FoodBasePlan.predefined) {
                                 Text(LocalizedStringKey($0.name)).tag($0)
                             }
                         }

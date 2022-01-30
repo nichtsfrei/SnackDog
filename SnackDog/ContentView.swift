@@ -9,15 +9,17 @@ struct Sidebar: View {
             NavigationLink(
                 destination: DogsView()
             ) {
-                
                 Text("Dogs")
-                
+            }
+            NavigationLink(destination: BasePlanOverView()) {
+                Text("Plan")
             }
             NavigationLink(
                 destination: AlgaePowderView( )
             ) {
                 Text("Algae Powder")
             }
+            
         }.listStyle(SidebarListStyle())
     }
 }

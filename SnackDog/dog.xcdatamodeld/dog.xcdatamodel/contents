@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21C52" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CategoryData" representedClassName="CategoryData" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String" allowsCloudEncryption="YES"/>
+        <attribute name="sortIndex" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="needs" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="NeedData" inverseName="category" inverseEntity="NeedData"/>
+        <relationship name="percent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MeasurementData" inverseName="category" inverseEntity="MeasurementData"/>
+    </entity>
     <entity name="Dog" representedClassName="Dog" syncable="YES" codeGenerationType="class">
         <attribute name="activity_hours" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="birthdate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="birthdate" optional="YES" attributeType="Date" allowsCloudEncryption="YES" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="is_nautered" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="is_old" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String" allowsCloudEncryption="YES" spotlightIndexingEnabled="YES"/>
         <attribute name="typus" optional="YES" attributeType="String"/>
         <relationship name="weight" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MeasurementData" inverseName="weight" inverseEntity="MeasurementData"/>
+    </entity>
+    <entity name="FoodBasePlanData" representedClassName="FoodBasePlanData" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="needs" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="NeedData" inverseName="foodPlan" inverseEntity="NeedData"/>
     </entity>
     <entity name="FoodPlanData" representedClassName="FoodPlanData" syncable="YES" codeGenerationType="class">
         <attribute name="basePlan" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -26,14 +38,29 @@
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="symbol" attributeType="String" defaultValueString="&quot;&quot;"/>
         <attribute name="value" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CategoryData" inverseName="percent" inverseEntity="CategoryData"/>
         <relationship name="jod" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="JodData" inverseName="value" inverseEntity="JodData"/>
         <relationship name="jodPer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="JodData" inverseName="per" inverseEntity="JodData"/>
+        <relationship name="need" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NeedData" inverseName="percentage" inverseEntity="NeedData"/>
         <relationship name="weight" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Dog" inverseName="weight" inverseEntity="Dog"/>
     </entity>
+    <entity name="NeedData" representedClassName="NeedData" syncable="YES" codeGenerationType="class">
+        <attribute name="basedOn" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="days" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="portions" optional="YES" attributeType="String"/>
+        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CategoryData" inverseName="needs" inverseEntity="CategoryData"/>
+        <relationship name="foodPlan" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FoodBasePlanData" inverseName="needs" inverseEntity="FoodBasePlanData"/>
+        <relationship name="percentage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MeasurementData" inverseName="need" inverseEntity="MeasurementData"/>
+    </entity>
     <elements>
-        <element name="Dog" positionX="-63" positionY="-18" width="128" height="149"/>
-        <element name="FoodPlanData" positionX="135" positionY="-63" width="128" height="89"/>
+        <element name="CategoryData" positionX="217.27734375" positionY="144.81640625" width="128" height="104"/>
+        <element name="Dog" positionX="-63" positionY="-18" width="128" height="163"/>
+        <element name="FoodBasePlanData" positionX="14.06640625" positionY="556.8046875" width="128" height="88"/>
+        <element name="FoodPlanData" positionX="-49.87109375" positionY="-368.59765625" width="128" height="89"/>
         <element name="JodData" positionX="1674.609375" positionY="-2.66796875" width="128" height="89"/>
-        <element name="MeasurementData" positionX="769.79296875" positionY="-219.94140625" width="128" height="119"/>
+        <element name="MeasurementData" positionX="769.79296875" positionY="-219.94140625" width="128" height="163"/>
+        <element name="NeedData" positionX="458.04296875" positionY="407.89453125" width="128" height="163"/>
     </elements>
 </model>
